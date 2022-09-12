@@ -7,8 +7,8 @@ The goal of managing complex states in an application should be focussed on the 
 1. They should be easy to configure.
 2. They should be easy to manage.
 3. They should be easy to consume.
-3. They should be easy to troubleshoot.
-4. They should be performant. 
+4. They should be easy to troubleshoot.
+5. They should be performant. 
 
 ## Complex States
 
@@ -26,7 +26,7 @@ React itself and the React echo system offer a lot of potential tools to help ma
 
 ## Test Application
 
-We're going to build a budgeting application for personal finance. The application will support multiple budgets, each with income and expense categories, and each category with planning and transaction tracking. 
+We're going to build parts of a budgeting application for personal finance. The application will support multiple budgets, each with income and expense categories, and each category with planning and transaction tracking. 
 
 We're going to build the application using Vite and TailwindCss so we can focus on code and not UI Libraries. We won't go into the steps necessary to create a Vite React app with TailwindCss. You can find them at the [Vite](https://vitejs.dev/guide/#overview) and [TailwindCss](https://tailwindcss.com/docs/installation) sites. 
 
