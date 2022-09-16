@@ -1,4 +1,7 @@
 import { uuid } from './utils'
+
+const date = new Date()
+
 export default {
   name: 'Family Budget',
   id: uuid(),
@@ -27,9 +30,7 @@ export default {
                 planned: 0,
                 actual: 0,
                 remaining: 0,
-                transactions: [{
-                  date: Date.now(), source: '', amount: 1000
-                }]
+                transactions: []
               },
               {
                 name: 'Paycheck #2',
@@ -37,9 +38,7 @@ export default {
                 planned: 0,
                 actual: 0,
                 remaining: 0,
-                transactions: [{
-                  date: Date.now(), source: '', amount: 1000
-                }]
+                transactions: []
               }
             ]
           }
