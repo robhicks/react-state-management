@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import model from '../budget.model'
-import BudgetDatePicker from './BudgetDatePicker'
-import ActivityFilter from './ActivityFilter'
+import BudgetDatePicker from '../common/BudgetDatePicker'
+import ActivityFilter from '../common/ActivityFilter'
 import { get, set } from 'idb-keyval'
 import MonthlyBudgets from './MonthlyBudgets'
 

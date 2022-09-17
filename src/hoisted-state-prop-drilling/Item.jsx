@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react'
-import InPlaceEditor from './InPlaceEditor'
+import InPlaceEditor from '../common/InPlaceEditor'
 import Transaction from './Transaction'
 import { set } from 'idb-keyval'
 import { copy, reducer, uuid } from '../utils'

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react'
 import Category from './Category'
-import Accordion from './Accordion'
+import Accordion from '../common/Accordion'
 import { reducer } from '../utils/'
 
 export default function Categories ({ active, budget, monthlyBudget, setBudget }) {

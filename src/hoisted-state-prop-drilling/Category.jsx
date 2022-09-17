@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react'
-import Accordion from './Accordion'
+import Accordion from '../common/Accordion'
 import Item from './Item'
-import InPlaceEditor from './InPlaceEditor'
+import InPlaceEditor from '../common/InPlaceEditor'
 import { set } from 'idb-keyval'
 
 export default function Category ({ active, budget, category, monthlyBudget, setBudget }) {
