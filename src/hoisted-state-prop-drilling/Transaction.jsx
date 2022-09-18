@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { mdiDelete } from '@mdi/js'
 import { copy, reducer } from '../utils'
 import { set } from 'idb-keyval'
@@ -10,8 +10,8 @@ export default function Transaction ({ budget, category, item, monthlyBudget, se
 
   useEffect(() => {
     const d = new Date()
-    const firstDay = new Date(d.getFullYear(), d.getMonth(), 1);
-    const lastDayOfMonth = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+    const firstDay = new Date(d.getFullYear(), d.getMonth(), 1)
+    const lastDayOfMonth = new Date(d.getFullYear(), d.getMonth() + 1, 0)
     const formattedFirstDay = firstDay.toISOString().substring(0, 10)
     const formattedLastDayOfMonth = lastDayOfMonth.toISOString().substring(0, 10)
     setMinDate(formattedFirstDay)
@@ -65,9 +65,6 @@ export default function Transaction ({ budget, category, item, monthlyBudget, se
     setBudget(bud)
     set('budget', bud)
   }
-
-  console.log(`maxDate`, maxDate)
-  console.log(`minDate`, minDate)
 
   return (
     <div className="grid grid-cols-4 gap-2 mb-1">

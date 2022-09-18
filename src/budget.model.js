@@ -1,7 +1,5 @@
 import { uuid } from './utils'
 
-const date = new Date()
-
 export default {
   name: 'Family Budget',
   id: uuid(),
