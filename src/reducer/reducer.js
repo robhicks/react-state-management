@@ -4,6 +4,9 @@ import { set } from 'idb-keyval'
 const copy = (obj) => JSON.parse(JSON.stringify(obj))
 const key = 'budget'
 
+const getCategory = (monthlyBudget, action) => monthlyBudget.categories.income.find((cat) => cat.id === action.categoryId) ||
+  monthlyBudget.categories.expense.find((cat) => cat.id === action.categoryId)
+
 const reducer = (state, action) => {
   // console.log('action', action)
   switch (action.type) {
@@ -18,7 +21,7 @@ const reducer = (state, action) => {
     case 'UPDATE_CATEGORY_NAME': {
       const budget = copy(state)
       const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.id === action.monthlyBudgetId)
-      const category = monthlyBudget.categories.income.find((cat) => cat.id === action.categoryId) || monthlyBudget.categories.expense.find((cat) => cat.id === action.categoryId)
+      const category = getCategory(monthlyBudget, action)
       category.name = action.name
       const newState = { ...state, ...budget }
       set(key, newState)
@@ -27,7 +30,7 @@ const reducer = (state, action) => {
     case 'CHANGE_ITEM_NAME': {
       const budget = copy(state)
       const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.id === action.monthlyBudgetId)
-      const category = monthlyBudget.categories.income.find((cat) => cat.id === action.categoryId) || monthlyBudget.categories.expense.find((cat) => cat.id === action.categoryId)
+      const category = getCategory(monthlyBudget, action)
       const item = category.items.find((i) => i.id === action.itemId)
       item.name = action.name
       const newState = { ...state, ...budget }
@@ -37,7 +40,7 @@ const reducer = (state, action) => {
     case 'CHANGE_ITEM_PLANNED_AMOUNT': {
       const budget = copy(state)
       const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.id === action.monthlyBudgetId)
-      const category = monthlyBudget.categories.income.find((cat) => cat.id === action.categoryId) || monthlyBudget.categories.expense.find((cat) => cat.id === action.categoryId)
+      const category = getCategory(monthlyBudget, action)
       const item = category.items.find((i) => i.id === action.itemId)
       item.planned = action.planned
       category.planned = category.items.reduce((p, c) => arrayReducer(p, c, 'planned'))
@@ -49,7 +52,7 @@ const reducer = (state, action) => {
     case 'ADD_EMPTY_TRANSACTION': {
       const budget = copy(state)
       const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.id === action.monthlyBudgetId)
-      const category = monthlyBudget.categories.income.find((cat) => cat.id === action.categoryId) || monthlyBudget.categories.expense.find((cat) => cat.id === action.categoryId)
+      const category = getCategory(monthlyBudget, action)
       const item = category.items.find((i) => i.id === action.itemId)
       item.transactions.push(action.transaction)
       const newState = { ...state, ...budget }
@@ -59,7 +62,7 @@ const reducer = (state, action) => {
     case 'DELETE_TRANSACTION': {
       const budget = copy(state)
       const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.id === action.monthlyBudgetId)
-      const category = monthlyBudget.categories.income.find((cat) => cat.id === action.categoryId) || monthlyBudget.categories.expense.find((cat) => cat.id === action.categoryId)
+      const category = getCategory(monthlyBudget, action)
       const item = category.items.find((i) => i.id === action.itemId)
       item.transactions = item.transactions.filter((tx) => tx.id !== action.transactionId)
       const newState = { ...state, ...budget }
@@ -69,7 +72,7 @@ const reducer = (state, action) => {
     case 'CHANGE_TRANSACTION_DATE': {
       const budget = copy(state)
       const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.id === action.monthlyBudgetId)
-      const category = monthlyBudget.categories.income.find((cat) => cat.id === action.categoryId) || monthlyBudget.categories.expense.find((cat) => cat.id === action.categoryId)
+      const category = getCategory(monthlyBudget, action)
       const item = category.items.find((i) => i.id === action.itemId)
       const transaction = item.transactions.find((tx) => tx.id === action.transactionId)
       transaction.source = action.source
