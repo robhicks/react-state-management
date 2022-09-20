@@ -105,7 +105,6 @@ const reducer = (state, action) => {
       category.remaining = category.planned - category.actual
 
       const newState = { ...state, ...budget }
-      console.log('newState', newState)
       set(key, newState)
       return newState
     }
