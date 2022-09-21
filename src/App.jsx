@@ -4,9 +4,7 @@ import Home from './Home'
 import HoistedPropDrilling from './hoisted-state-prop-drilling'
 import ReactUseReducer from './reducer'
 import CustomHook from './custom-hook'
-import SingleProviderMonolithicModel from './single-provider-monolithic-model'
-import SingleProviderSegmentedModel from './single-provider-segmented-model'
-import SegmentedProviders from './segmented-providers'
+import ContextProvider from './context-provider'
 import MobX from './mobx'
 import Redux from './redux'
 import onRender from './onRender'
@@ -24,11 +22,9 @@ function App () {
         <Route path="01-hoisted-props" element={<HoistedPropDrilling />} />
         <Route path="02-use-reducer" element={<ReactUseReducer />} />
         <Route path="03-custom-hook" element={<CustomHook />} />
-        <Route path="04-single-provider-monolithic-model" element={<SingleProviderMonolithicModel />} />
-        <Route path="05-single-provider-segmented-model" element={<SingleProviderSegmentedModel />} />
-        <Route path="06-segmented-providers" element={<SegmentedProviders />} />
-        <Route path="07-mobx" element={<MobX />} />
-        <Route path="08-redux" element={<Redux />} />
+        <Route path="04-context-provider" element={<ContextProvider />} />
+        <Route path="05-mobx" element={<MobX />} />
+        <Route path="06-redux" element={<Redux />} />
       </Routes>
     </BrowserRouter>
   </Profiler >

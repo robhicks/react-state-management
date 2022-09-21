@@ -8,9 +8,9 @@ export default function Home () {
       <li><Link to="/02-use-reducer">02-use-reducer</Link></li>
       <li><Link to="/03-custom-hook">03-custom-hook</Link></li>
       <li><Link to="/04-context-provider">04-context-provider</Link></li>
-      <li><Link to="/05-mobx">07-mobx</Link></li>
-      <li><Link to="/06-redux">08-redux</Link></li>
-      <li><Link to="/07-recoil">09-recoil</Link></li>
+      <li><Link to="/05-mobx">05-mobx</Link></li>
+      <li><Link to="/06-redux">06-redux</Link></li>
+      <li><Link to="/07-recoil">07-recoil</Link></li>
     </ul>
   </div>)
 }
