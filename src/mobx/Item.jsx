@@ -3,33 +3,32 @@ import React, { useEffect, useState } from 'react'
 import InPlaceEditor from '../common/InPlaceEditor'
 import Transaction from './Transaction'
 import { mdiPlus } from '@mdi/js'
-import { useBudget } from './BudgetProvider'
-import { getItemData } from '../utils'
+import { observer } from 'mobx-react-lite'
+import store from './BudgetModel'
 
-export default function Item ({ active, itemId }) {
-  const { addEmptyTransaction, budget, changeItemName, changeItemPlannedAmount } = useBudget()
-  const [item, setItem] = useState({ transactions: [] })
+const Item = observer(({ item }) => {
+  const [budget] = useState(store)
   const [amount, setAmount] = useState(0)
+  const [planned, setPlanned] = useState(item.planned)
 
   useEffect(() => {
-    const { item: itm } = getItemData(budget, itemId)
-    if (active === 'actual') setAmount(itm.actual)
-    if (active === 'planned') setAmount(itm.planned)
-    if (active === 'remaining') setAmount(itm.remaining)
-    setItem(itm)
-  }, [active, budget, itemId])
+    if (budget.active === 'actual') setAmount(item.actual)
+    if (budget.active === 'planned') setAmount(item.planned)
+    if (budget.active === 'remaining') setAmount(item.remaining)
+  }, [budget.active, item.planned, item.actual])
 
   const changeName = (value) => {
-    changeItemName(itemId, value)
+    budget.changeItemName(item.id, value)
   }
 
   const changePlanned = (ev) => {
     const { value } = ev.target
-    changeItemPlannedAmount(itemId, value)
+    setPlanned(value)
+    budget.changeItemPlannedAmount(item.id, value)
   }
 
   const addEmptyTx = () => {
-    addEmptyTransaction(itemId)
+    budget.addEmptyTransaction(item.id)
   }
 
   return (
@@ -38,13 +37,16 @@ export default function Item ({ active, itemId }) {
         <InPlaceEditor setValue={changeName} value={item.name}>{item.name}</InPlaceEditor>
         <div>{amount}</div>
       </div>
-      <div className="pl-6">Planned: <input type="number" value={item.planned || ''} onInput={changePlanned} /></div>
+      <div className="pl-6">Planned: <input type="number" value={planned} onInput={changePlanned} /></div>
       <div className="pl-6 flex gap-1 items-center">Transactions <button className="h-5 w-5" onClick={addEmptyTx}><svg height="20" width="20"><path d={mdiPlus}></path></svg></button></div>
       <div className="pl-8">
         {item.transactions.map((tx) =>
-          <Transaction key={tx.id} txId={tx.id} />
+          <Transaction key={tx.id} transaction={tx} />
         )}
       </div>
     </div>
   )
 }
+)
+
+export default Item

@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 import Accordion from '../common/Accordion'
 import Item from './Item'
 import InPlaceEditor from '../common/InPlaceEditor'
-import { findCategory, useBudget } from './BudgetProvider'
+import { useBudget } from './BudgetProvider'
+import { getCategoryData } from '../utils'
 
 export default function Category ({ active, categoryId }) {
   const { budget, changeCategoryName } = useBudget()
@@ -11,7 +12,7 @@ export default function Category ({ active, categoryId }) {
   const [category, setCategory] = useState({ items: [] })
 
   useEffect(() => {
-    const cat = findCategory(budget.monthlyBudgets, categoryId)
+    const { category: cat } = getCategoryData(budget, categoryId)
     if (active === 'actual') setAmount(cat.actual)
     if (active === 'planned') setAmount(cat.planned)
     if (active === 'remaining') setAmount(cat.remaining)

@@ -1,14 +1,13 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react'
 import { mdiDelete } from '@mdi/js'
-import { useBudget } from './BudgetProvider'
-import { getTransactionData } from '../utils'
+import { observer } from 'mobx-react-lite'
+import store from './BudgetModel'
 
-export default function Transaction ({ txId }) {
-  const { budget, changeTransactionAmount, changeTransactionDate, changeTransactionSource, deleteTransaction } = useBudget()
+const Transaction = observer(({ transaction }) => {
+  const [budget] = useState(store)
   const [maxDate, setMaxDate] = useState()
   const [minDate, setMinDate] = useState()
-  const [transaction, setTransaction] = useState({ })
 
   useEffect(() => {
     const d = new Date()
@@ -20,29 +19,24 @@ export default function Transaction ({ txId }) {
     setMaxDate(formattedLastDayOfMonth)
   }, [])
 
-  useEffect(() => {
-    const { transaction: tx } = getTransactionData(budget, txId)
-    setTransaction(tx)
-  }, [budget, txId])
-
   const delTx = () => {
-    deleteTransaction(txId)
+    budget.deleteTransaction(transaction.id)
   }
 
   const dateChangeHandler = (ev) => {
-    changeTransactionDate(txId, ev.target.value)
+    budget.changeTransactionDate(transaction.id, ev.target.value)
   }
 
   const sourceChangeHandler = (ev) => {
-    changeTransactionSource(txId, ev.target.value)
+    budget.changeTransactionSource(transaction.id, ev.target.value)
   }
 
   const amountChangeHandler = (ev) => {
-    changeTransactionAmount(txId, ev.target.value)
+    budget.changeTransactionAmount(transaction.id, ev.target.value)
   }
 
   return (
-    <div className="grid grid-cols-4 gap-2 mb-1">
+    <div className="grid grid-cols-4 gap-2 mb-1 items-center">
       <input type="date" value={transaction.date || ''} onChange={dateChangeHandler} min={minDate} max={maxDate} />
       <input type="text" placeholder="Source" value={transaction.source || ''} onInput={sourceChangeHandler} />
       <input type="number" placeholder="Amount" value={transaction.amount || ''} onInput={amountChangeHandler} />
@@ -50,3 +44,6 @@ export default function Transaction ({ txId }) {
     </div>
   )
 }
+)
+
+export default Transaction
