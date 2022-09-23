@@ -1,7 +1,7 @@
 import { createSlice, configureStore } from '@reduxjs/toolkit'
 import model from '../budget.model'
 import { copy, dateReviver, deserialize, getCategoryData, getItemData, getTransactionData, reducer, serialize, uuid } from '../utils'
-import { set } from 'idb-keyval'
+import { set } from '../db'
 import add from 'date-fns/add'
 
 if (!model.active) model.active = 'planned'

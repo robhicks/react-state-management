@@ -5,7 +5,7 @@ import MonthlyBudgets from './MonthlyBudgets'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectBudget, changeBudgetName, loadFromStorage, setActive, setCurrentDate } from './budget-store'
 import { dateReviver, deserialize, serialize } from '../utils'
-import { get } from 'idb-keyval'
+import { get } from '../db'
 
 export default function Budget () {
   const budget = useSelector(selectBudget)
