@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import model from '../budget.model'
-import { get, set } from 'idb-keyval'
+import { get, set } from '../db'
 
 const key = 'budget'
 

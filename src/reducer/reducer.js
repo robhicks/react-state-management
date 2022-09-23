@@ -1,5 +1,5 @@
 import { reducer as arrayReducer } from '../utils'
-import { set } from 'idb-keyval'
+import { set } from '../db'
 
 const copy = (obj) => JSON.parse(JSON.stringify(obj))
 const key = 'budget'

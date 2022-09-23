@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import model from '../budget.model'
-import { get, set } from 'idb-keyval'
+import { get, set } from '../db'
 import { copy, reducer, uuid, getCategoryData, getItemData, getTransactionData } from '../utils'
 
 const key = 'budget'

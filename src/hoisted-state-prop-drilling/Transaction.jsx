@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { mdiDelete } from '@mdi/js'
 import { copy, reducer } from '../utils'
-import { set } from 'idb-keyval'
+import { set } from '../db'
 
 export default function Transaction ({ budget, category, item, monthlyBudget, setBudget, tx }) {
   const [maxDate, setMaxDate] = useState()

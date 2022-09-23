@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import InPlaceEditor from '../common/InPlaceEditor'
 import Transaction from './Transaction'
-import { set } from 'idb-keyval'
+import { set } from '../db'
 import { copy, reducer, uuid } from '../utils'
 import { mdiPlus } from '@mdi/js'
 

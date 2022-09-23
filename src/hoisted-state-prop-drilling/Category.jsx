@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Accordion from '../common/Accordion'
 import Item from './Item'
 import InPlaceEditor from '../common/InPlaceEditor'
-import { set } from 'idb-keyval'
+import { set } from '../db'
 
 export default function Category ({ active, budget, category, monthlyBudget, setBudget }) {
   const [amount, setAmount] = useState(0)

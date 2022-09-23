@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useState } from 'react'
 import model from '../budget.model'
 import BudgetDatePicker from '../common/BudgetDatePicker'
 import ActivityFilter from '../common/ActivityFilter'
-import { get } from 'idb-keyval'
+import { get } from '../db'
 import MonthlyBudgets from './MonthlyBudgets'
 import reducer from './reducer'
 
