@@ -1,15 +1,9 @@
 import { autorun, makeAutoObservable } from 'mobx'
 import model from '../budget.model'
-import { get, set } from 'idb-keyval'
+import { get, set } from '../db'
 import { copy, getCategoryData, getItemData, getTransactionData, reducer, uuid } from '../utils'
 
 const key = 'budget'
-
-const save = (storageObject) => {
-  const copied = copy(storageObject)
-  // console.log('copied', copied)
-  set(key, copied)
-}
 
 export class BudgetModel {
   constructor (model) {
@@ -26,7 +20,6 @@ export class BudgetModel {
     const { item } = getItemData(this, itemId)
     const d = new Date()
     item.transactions.push({ amount: 0, date: d.toISOString().substring(0, 10), id: uuid() })
-    save({ id: this.id, name: this.name, monthlyBudgets: this.monthlyBudgets })
   }
 
   changeBudgetName = (name) => {
@@ -36,13 +29,11 @@ export class BudgetModel {
   changeCategoryName = (categoryId, name) => {
     const { category } = getCategoryData(this, categoryId)
     category.name = name
-    save({ id: this.id, name: this.name, monthlyBudgets: this.monthlyBudgets })
   }
 
   changeItemName = (itemId, name) => {
     const { item } = getItemData(this, itemId)
     item.name = name
-    save({ id: this.id, name: this.name, monthlyBudgets: this.monthlyBudgets })
   }
 
   changeItemPlannedAmount = (itemId, amount) => {
@@ -50,7 +41,6 @@ export class BudgetModel {
     item.planned = Number(amount)
     category.planned = category.items.reduce((p, c) => reducer(p, c, 'planned'))
     category.remaining = category.planned - category.actual
-    save({ id: this.id, name: this.name, monthlyBudgets: this.monthlyBudgets })
   }
 
   changeTransactionAmount = (txId, amount) => {
@@ -60,19 +50,16 @@ export class BudgetModel {
     item.remaining = item.planned - item.actual
     category.actual = category.items.reduce((p, c) => reducer(p, c, 'actual'), 0)
     category.remaining = category.planned - category.actual
-    save({ id: this.id, name: this.name, monthlyBudgets: this.monthlyBudgets })
   }
 
   changeTransactionDate = (txId, date) => {
     const { transaction } = getTransactionData(this, txId)
     transaction.date = date
-    save({ id: this.id, name: this.name, monthlyBudgets: this.monthlyBudgets })
   }
 
   changeTransactionSource = (txId, source) => {
     const { transaction } = getTransactionData(this, txId)
     transaction.source = source
-    save({ id: this.id, name: this.name, monthlyBudgets: this.monthlyBudgets })
   }
 
   deleteTransaction = (txId) => {
@@ -82,12 +69,11 @@ export class BudgetModel {
     item.remaining = item.planned - item.actual
     category.actual = category.items.reduce((p, c) => reducer(p, c, 'actual'), 0)
     category.remaining = category.planned - category.actual
-    save({ id: this.id, name: this.name, monthlyBudgets: this.monthlyBudgets })
   }
 
   async loadFromStorage () {
     const storedBudget = await get(key)
-    if (storedBudget) {
+    if (storedBudget.id && storedBudget.name && storedBudget.monthlyBudgets) {
       this.name = storedBudget.name
       this.monthlyBudgets = storedBudget.monthlyBudgets
     }
@@ -118,7 +104,7 @@ const store = new BudgetModel(model)
 
 autorun(() => {
   const storageObject = copy({ id: store.id, name: store.name, monthlyBudgets: store.monthlyBudgets })
-  save(storageObject)
+  set(key, storageObject)
 })
 
 export default store

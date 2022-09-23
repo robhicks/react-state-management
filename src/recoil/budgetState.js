@@ -7,7 +7,6 @@ const key = 'budget'
 const storageEffect = (key) => ({ setSelf, onSet, trigger }) => {
   const loadPersisted = async () => {
     const savedValue = await get(key)
-    console.log(savedValue)
     if (savedValue !== null) {
       setSelf({ ...savedValue, active: 'planned', currentDate: new Date() })
     }
