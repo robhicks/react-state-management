@@ -6,9 +6,17 @@ const key = 'budget'
 
 const storageEffect = (key) => ({ setSelf, onSet, trigger }) => {
   const loadPersisted = async () => {
+    const currentDate = new Date()
+    const month = currentDate.getMonth()
+    const year = currentDate.getFullYear()
+
     const savedValue = await get(key)
     if (savedValue !== null) {
-      setSelf({ ...savedValue, active: 'planned', currentDate: new Date() })
+      const currentBudget = savedValue.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
+      setSelf({ ...savedValue, active: 'planned', currentDate, currentBudget })
+    } else {
+      const currentBudget = model.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
+      setSelf({ ...model, active: 'planned', currentDate, currentBudget })
     }
   }
 
@@ -17,7 +25,7 @@ const storageEffect = (key) => ({ setSelf, onSet, trigger }) => {
   }
 
   onSet((newValue, _, isReset) => {
-    isReset ? del(key) : set(key, newValue)
+    isReset ? del(key) : set(key, ({ id: newValue.id, name: newValue.name, monthlyBudgets: newValue.monthlyBudgets }))
   })
 }
 
