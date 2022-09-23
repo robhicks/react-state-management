@@ -2,56 +2,43 @@
 import React, { useEffect, useState } from 'react'
 import InPlaceEditor from '../common/InPlaceEditor'
 import Transaction from './Transaction'
+import { copy, getItemData, reducer, uuid } from '../utils'
 import { mdiPlus } from '@mdi/js'
-import { getItemData } from './useBudget'
-import { copy, reducer, uuid } from '../utils'
 
-export default function Item ({ active, budget, item, saveBudget, setBudget }) {
+export default function Item ({ budget, item, setBudget }) {
   const [amount, setAmount] = useState(0)
   const [planned, setPlanned] = useState(item.planned)
 
   useEffect(() => {
-    const { item: itm } = getItemData(budget, item.id)
-    if (active === 'actual') setAmount(itm.actual)
-    if (active === 'planned') setAmount(itm.planned)
-    if (active === 'remaining') setAmount(itm.remaining)
-  }, [active, budget, item])
+    if (budget.active === 'actual') setAmount(item.actual)
+    if (budget.active === 'planned') setAmount(item.planned)
+    if (budget.active === 'remaining') setAmount(item.remaining)
+  }, [budget.active, item.actual, item.planned, item.remaining])
 
   const changeName = (value) => {
-    setBudget((cur) => {
-      const bud = copy(cur)
-      const { item: itm } = getItemData(bud, item.id)
-      itm.name = value
-      saveBudget(bud)
-      return bud
-    })
+    const bud = copy(budget)
+    const { item: itm } = getItemData(bud, item.id)
+    itm.name = value
+    setBudget((cur) => ({ ...cur, ...bud }))
   }
 
   const changePlanned = (ev) => {
     const { value } = ev.target
     setPlanned(value)
-
-    setBudget((cur) => {
-      const bud = copy(cur)
-      const { category, item: itm } = getItemData(bud, item.id)
-      itm.planned = Number(amount)
-      // update the category planned value
-      category.planned = category.items.reduce((p, c) => reducer(p, c, 'planned'))
-      category.remaining = category.planned - category.actual
-      saveBudget(bud)
-      return bud
-    })
+    const bud = copy(budget)
+    const { category, item: itm } = getItemData(bud, item.id)
+    itm.planned = Number(value)
+    category.planned = category.items.reduce((p, c) => reducer(p, c, 'planned'))
+    category.remaining = category.planned - category.actual
+    setBudget({ ...budget, ...bud })
   }
 
   const addEmptyTx = () => {
-    setBudget((cur) => {
-      const bud = copy(cur)
-      const d = new Date()
-      const { item: itm } = getItemData(bud, item.id)
-      itm.transactions.push({ amount: 0, date: d.toISOString().substring(0, 10), id: uuid() })
-      saveBudget(bud)
-      return bud
-    })
+    const bud = copy(budget)
+    const { item: itm } = getItemData(bud, item.id)
+    const d = new Date()
+    itm.transactions.push({ amount: 0, date: d.toISOString().substring(0, 10), id: uuid() })
+    setBudget({ ...budget, ...bud })
   }
 
   return (
@@ -64,7 +51,7 @@ export default function Item ({ active, budget, item, saveBudget, setBudget }) {
       <div className="pl-6 flex gap-1 items-center">Transactions <button className="h-5 w-5" onClick={addEmptyTx}><svg height="20" width="20"><path d={mdiPlus}></path></svg></button></div>
       <div className="pl-8">
         {item.transactions.map((tx) =>
-          <Transaction budget={budget} key={tx.id} saveBudget={saveBudget} setBudget={setBudget} tx={tx} />
+          <Transaction budget={budget} setBudget={setBudget} key={tx.id} transaction={tx} />
         )}
       </div>
     </div>
