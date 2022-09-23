@@ -1,112 +1,89 @@
-import { reducer as arrayReducer } from '../utils'
-import { set } from '../db'
-
-const copy = (obj) => JSON.parse(JSON.stringify(obj))
-const key = 'budget'
-
-const getCategory = (monthlyBudget, action) => monthlyBudget.categories.income.find((cat) => cat.id === action.categoryId) ||
-  monthlyBudget.categories.expense.find((cat) => cat.id === action.categoryId)
+import { copy, getItemData, getCategoryData, getTransactionData, reducer as amountReducer, uuid } from '../utils'
 
 const reducer = (state, action) => {
   // console.log('action', action)
   switch (action.type) {
     case 'LOAD_FROM_STORAGE': {
-      return { ...state, ...action.data }
+      const newState = { ...state, ...action.data }
+      return newState
     }
     case 'CHANGE_BUDGET_NAME': {
       const newState = { ...state, name: action.name }
-      set(key, newState)
       return newState
     }
     case 'UPDATE_CATEGORY_NAME': {
       const budget = copy(state)
-      const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.id === action.monthlyBudgetId)
-      const category = getCategory(monthlyBudget, action)
+      const { category } = getCategoryData(budget, action.categoryId)
       category.name = action.name
       const newState = { ...state, ...budget }
-      set(key, newState)
       return newState
     }
     case 'CHANGE_ITEM_NAME': {
       const budget = copy(state)
-      const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.id === action.monthlyBudgetId)
-      const category = getCategory(monthlyBudget, action)
-      const item = category.items.find((i) => i.id === action.itemId)
+      const { item } = getItemData(budget, action.itemId)
       item.name = action.name
       const newState = { ...state, ...budget }
-      set(key, newState)
       return newState
     }
     case 'CHANGE_ITEM_PLANNED_AMOUNT': {
       const budget = copy(state)
-      const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.id === action.monthlyBudgetId)
-      const category = getCategory(monthlyBudget, action)
-      const item = category.items.find((i) => i.id === action.itemId)
-      item.planned = action.planned
-      category.planned = category.items.reduce((p, c) => arrayReducer(p, c, 'planned'))
+      const { category, item } = getItemData(budget, action.itemId)
+      item.planned = Number(action.amount)
+      category.planned = category.items.reduce((p, c) => amountReducer(p, c, 'planned'), 0)
       category.remaining = category.planned - category.actual
       const newState = { ...state, ...budget }
-      set(key, newState)
       return newState
     }
     case 'ADD_EMPTY_TRANSACTION': {
       const budget = copy(state)
-      const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.id === action.monthlyBudgetId)
-      const category = getCategory(monthlyBudget, action)
-      const item = category.items.find((i) => i.id === action.itemId)
-      item.transactions.push(action.transaction)
+      const { item } = getItemData(budget, action.itemId)
+      const d = new Date()
+      item.transactions.push({ amount: 0, date: d.toISOString().substring(0, 10), id: uuid() })
       const newState = { ...state, ...budget }
-      set(key, newState)
       return newState
     }
     case 'DELETE_TRANSACTION': {
       const budget = copy(state)
-      const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.id === action.monthlyBudgetId)
-      const category = getCategory(monthlyBudget, action)
-      const item = category.items.find((i) => i.id === action.itemId)
+      const { item } = getTransactionData(budget, action.transactionId)
       item.transactions = item.transactions.filter((tx) => tx.id !== action.transactionId)
       const newState = { ...state, ...budget }
-      set(key, newState)
       return newState
     }
     case 'CHANGE_TRANSACTION_DATE': {
       const budget = copy(state)
-      const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.id === action.monthlyBudgetId)
-      const category = getCategory(monthlyBudget, action)
-      const item = category.items.find((i) => i.id === action.itemId)
-      const transaction = item.transactions.find((tx) => tx.id === action.transactionId)
+      const { transaction } = getTransactionData(budget, action.transactionId)
       transaction.source = action.source
       const newState = { ...state, ...budget }
-      set(key, newState)
       return newState
     }
     case 'CHANGE_TRANSACTION_SOURCE': {
       const budget = copy(state)
-      const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.id === action.monthlyBudgetId)
-      const category = monthlyBudget.categories.income.find((cat) => cat.id === action.categoryId) || monthlyBudget.categories.expense.find((cat) => cat.id === action.categoryId)
-      const item = category.items.find((i) => i.id === action.itemId)
-      const transaction = item.transactions.find((tx) => tx.id === action.transactionId)
+      const { transaction } = getTransactionData(budget, action.transactionId)
       transaction.source = action.source
       const newState = { ...state, ...budget }
-      set(key, newState)
       return newState
     }
     case 'CHANGE_TRANSACTION_AMOUNT': {
       const budget = copy(state)
-      const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.id === action.monthlyBudgetId)
-      const category = monthlyBudget.categories.income.find((cat) => cat.id === action.categoryId) || monthlyBudget.categories.expense.find((cat) => cat.id === action.categoryId)
-      const item = category.items.find((i) => i.id === action.itemId)
-      const transaction = item.transactions.find((tx) => tx.id === action.transactionId)
+      const { category, item, transaction } = getTransactionData(budget, action.transactionId)
       transaction.amount = action.amount
 
-      item.actual = item.transactions.reduce((p, c) => arrayReducer(p, c, 'amount'), 0)
-      category.actual = category.items.reduce((p, c) => arrayReducer(p, c, 'actual'), 0)
+      item.actual = item.transactions.reduce((p, c) => amountReducer(p, c, 'amount'), 0)
+      category.actual = category.items.reduce((p, c) => amountReducer(p, c, 'actual'), 0)
       item.remaining = item.planned - item.actual
       category.remaining = category.planned - category.actual
 
       const newState = { ...state, ...budget }
-      set(key, newState)
       return newState
+    }
+    case 'SET_ACTIVITY': {
+      return { ...state, active: action.active }
+    }
+    case 'SET_CURRENT_BUDGET': {
+      return { ...state, currentBudget: action.currentBudget }
+    }
+    case 'SET_CURRENT_DATE': {
+      return { ...state, currentDate: action.date }
     }
     default:
       throw new Error()

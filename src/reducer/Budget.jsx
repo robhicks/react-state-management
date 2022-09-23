@@ -1,36 +1,55 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useEffect, useRef, useReducer } from 'react'
 import model from '../budget.model'
 import BudgetDatePicker from '../common/BudgetDatePicker'
 import ActivityFilter from '../common/ActivityFilter'
-import { get } from '../db'
+import { get, set } from '../db'
 import MonthlyBudgets from './MonthlyBudgets'
 import reducer from './reducer'
 
+const initialState = { ...model, active: 'planned', currentDate: new Date() }
+
 export default function Budget () {
-  const [budget, dispatch] = useReducer(reducer, model)
-  const [active, setActive] = useState('planned')
-  const [currentDate, setCurrentDate] = useState(new Date())
+  const [budget, dispatch] = useReducer(reducer, initialState)
+  const loaded = useRef(false)
 
   const key = 'budget'
 
+  // load from IndexedDB
   useEffect(() => {
-    get(key).then((bud) => {
-      if (bud) {
-        dispatch({ type: 'LOAD_FROM_STORAGE', data: bud })
-      }
-    })
+    if (!loaded.current) {
+      loaded.current = true
+      get(key).then((bud) => {
+        if (bud) {
+          const newState = { ...model, ...bud, active: 'planned', currentDate: new Date() }
+          dispatch({ type: 'LOAD_FROM_STORAGE', data: newState })
+        }
+      })
+    }
   }, [])
 
-  const changeName = (ev) => {
-    dispatch({ type: 'CHANGE_BUDGET_NAME', name: ev.target.value })
-  }
+  // save to IndexedDb
+  useEffect(() => {
+    set(key, ({ id: budget.id, name: budget.name, monthlyBudgets: budget.monthlyBudgets }))
+  }, [budget.id, budget.name, budget.monthlyBudgets])
+
+  useEffect(() => {
+    const d = budget?.currentDate ? new Date(budget.currentDate) : new Date()
+    const month = d.getMonth()
+    const year = d.getFullYear()
+    const currentBudget = budget.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
+    dispatch({ type: 'SET_CURRENT_BUDGET', currentBudget })
+  }, [budget.currentDate, budget.monthlyBudgets])
+
+  const activityHandler = (val) => dispatch({ type: 'SET_ACTIVITY', active: val })
+  const currentDateHandler = (val) => dispatch({ type: 'SET_CURRENT_DATE', date: val })
+  const nameChangeHandler = (ev) => dispatch({ type: 'CHANGE_BUDGET_NAME', name: ev.target.value })
 
   return (<>
     <div className="flex justify-between items-center">
-      <input className="border-0 pl-0" type="text" value={budget.name} onInput={changeName} />
-      <BudgetDatePicker currentDate={currentDate} setCurrentDate={setCurrentDate} />
+      <input className="border-0 pl-0" type="text" value={budget.name} onInput={nameChangeHandler} />
+      <BudgetDatePicker currentDate={budget.currentDate} setCurrentDate={currentDateHandler} />
     </div>
-    <ActivityFilter active={active} setActive={setActive} />
-    <MonthlyBudgets active={active} budget={budget} currentDate={currentDate} dispatch={dispatch} />
+    <ActivityFilter active={budget.active} setActive={activityHandler} />
+    <MonthlyBudgets budget={budget} dispatch={dispatch} />
   </>)
 }

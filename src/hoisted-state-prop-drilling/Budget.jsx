@@ -6,7 +6,7 @@ import { get, set } from '../db'
 import MonthlyBudgets from './MonthlyBudgets'
 
 export default function Budget () {
-  const [budget, setBudget] = useState(model)
+  const [budget, setBudget] = useState({ ...model, currentDate: new Date() })
 
   const key = 'budget'
 
