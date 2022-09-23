@@ -11,18 +11,27 @@ export const Budget = createContext({})
 export const BudgetProvider = ({ children }) => {
   const [budget, setBudget] = useState(model)
 
-  const loadFromStorage = async () => {
-    const storedBudget = await get(key)
-    if (storedBudget) setBudget(storedBudget)
-  }
+  // load from IndexedDB
+  useEffect(() => {
+    get(key).then((bud) => {
+      if (bud) {
+        setBudget(({ ...model, ...bud, currentDate: new Date() }))
+      }
+    })
+  }, [])
+
+  // save to IndexedDb
+  useEffect(() => {
+    set(key, ({ id: budget.id, name: budget.name, monthlyBudgets: budget.monthlyBudgets }))
+  }, [budget.id, budget.name, budget.monthlyBudgets])
 
   useEffect(() => {
-    let mounted = true
-    if (mounted) loadFromStorage()
-    return () => {
-      mounted = false
-    }
-  }, [])
+    const d = budget?.currentDate ? new Date(budget.currentDate) : new Date()
+    const month = d.getMonth()
+    const year = d.getFullYear()
+    const currentBudget = budget.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
+    setBudget({ ...budget, currentBudget })
+  }, [budget.currentDate, budget.monthlyBudgets])
 
   const addEmptyTransaction = (itemId) => {
     setBudget((cur) => {
@@ -35,10 +44,16 @@ export const BudgetProvider = ({ children }) => {
     })
   }
 
-  const changeBudgetName = (ev) => {
+  const changeActivity = (val) => {
     setBudget((cur) => {
-      const bud = { ...cur, name: ev.target.value }
-      set(key, bud)
+      const bud = { ...cur, active: val }
+      return bud
+    })
+  }
+
+  const changeBudgetName = (val) => {
+    setBudget((cur) => {
+      const bud = { ...cur, name: val }
       return bud
     })
   }
@@ -48,7 +63,13 @@ export const BudgetProvider = ({ children }) => {
       const bud = copy(cur)
       const { category } = getCategoryData(bud, categoryId)
       category.name = name
-      set(key, bud)
+      return bud
+    })
+  }
+
+  const changeCurrentDate = (date) => {
+    setBudget((cur) => {
+      const bud = { ...cur, currentDate: date }
       return bud
     })
   }
@@ -58,7 +79,6 @@ export const BudgetProvider = ({ children }) => {
       const bud = copy(cur)
       const { item } = getItemData(bud, itemId)
       item.name = name
-      set(key, bud)
       return bud
     })
   }
@@ -66,12 +86,11 @@ export const BudgetProvider = ({ children }) => {
   const changeItemPlannedAmount = (itemId, amount) => {
     setBudget((cur) => {
       const bud = copy(cur)
-      const { category, item: itm } = getItemData(bud, itemId)
-      itm.planned = Number(amount)
+      const { category, item } = getItemData(bud, itemId)
+      item.planned = Number(amount)
       // update the category planned value
       category.planned = category.items.reduce((p, c) => reducer(p, c, 'planned'))
       category.remaining = category.planned - category.actual
-      set(key, bud)
       return bud
     })
   }
@@ -85,7 +104,6 @@ export const BudgetProvider = ({ children }) => {
       item.remaining = item.planned - item.actual
       category.actual = category.items.reduce((p, c) => reducer(p, c, 'actual'), 0)
       category.remaining = category.planned - category.actual
-      set(key, bud)
       return bud
     })
   }
@@ -129,8 +147,10 @@ export const BudgetProvider = ({ children }) => {
       value={{
         addEmptyTransaction,
         budget,
+        changeActivity,
         changeBudgetName,
         changeCategoryName,
+        changeCurrentDate,
         changeItemName,
         changeItemPlannedAmount,
         changeTransactionAmount,

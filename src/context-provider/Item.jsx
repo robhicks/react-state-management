@@ -4,32 +4,28 @@ import InPlaceEditor from '../common/InPlaceEditor'
 import Transaction from './Transaction'
 import { mdiPlus } from '@mdi/js'
 import { useBudget } from './BudgetProvider'
-import { getItemData } from '../utils'
 
-export default function Item ({ active, itemId }) {
+export default function Item ({ item }) {
   const { addEmptyTransaction, budget, changeItemName, changeItemPlannedAmount } = useBudget()
-  const [item, setItem] = useState({ transactions: [] })
   const [amount, setAmount] = useState(0)
 
   useEffect(() => {
-    const { item: itm } = getItemData(budget, itemId)
-    if (active === 'actual') setAmount(itm.actual)
-    if (active === 'planned') setAmount(itm.planned)
-    if (active === 'remaining') setAmount(itm.remaining)
-    setItem(itm)
-  }, [active, budget, itemId])
+    if (budget.active === 'actual') setAmount(item.actual)
+    if (budget.active === 'planned') setAmount(item.planned)
+    if (budget.active === 'remaining') setAmount(item.remaining)
+  }, [budget.active, item.actual, item.planned, item.remaining])
 
   const changeName = (value) => {
-    changeItemName(itemId, value)
+    changeItemName(item.id, value)
   }
 
   const changePlanned = (ev) => {
     const { value } = ev.target
-    changeItemPlannedAmount(itemId, value)
+    changeItemPlannedAmount(item.id, value)
   }
 
   const addEmptyTx = () => {
-    addEmptyTransaction(itemId)
+    addEmptyTransaction(item.id)
   }
 
   return (
@@ -42,7 +38,7 @@ export default function Item ({ active, itemId }) {
       <div className="pl-6 flex gap-1 items-center">Transactions <button className="h-5 w-5" onClick={addEmptyTx}><svg height="20" width="20"><path d={mdiPlus}></path></svg></button></div>
       <div className="pl-8">
         {item.transactions.map((tx) =>
-          <Transaction key={tx.id} txId={tx.id} />
+          <Transaction key={tx.id} transaction={tx} />
         )}
       </div>
     </div>

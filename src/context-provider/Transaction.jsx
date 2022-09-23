@@ -2,16 +2,14 @@
 import React, { useEffect, useState } from 'react'
 import { mdiDelete } from '@mdi/js'
 import { useBudget } from './BudgetProvider'
-import { getTransactionData } from '../utils'
 
-export default function Transaction ({ txId }) {
+export default function Transaction ({ transaction }) {
   const { budget, changeTransactionAmount, changeTransactionDate, changeTransactionSource, deleteTransaction } = useBudget()
   const [maxDate, setMaxDate] = useState()
   const [minDate, setMinDate] = useState()
-  const [transaction, setTransaction] = useState({ })
 
   useEffect(() => {
-    const d = new Date()
+    const d = budget.currentDate ? new Date(budget.currentDate) : new Date()
     const firstDay = new Date(d.getFullYear(), d.getMonth(), 1)
     const lastDayOfMonth = new Date(d.getFullYear(), d.getMonth() + 1, 0)
     const formattedFirstDay = firstDay.toISOString().substring(0, 10)
@@ -20,25 +18,20 @@ export default function Transaction ({ txId }) {
     setMaxDate(formattedLastDayOfMonth)
   }, [])
 
-  useEffect(() => {
-    const { transaction: tx } = getTransactionData(budget, txId)
-    setTransaction(tx)
-  }, [budget, txId])
-
   const delTx = () => {
-    deleteTransaction(txId)
+    deleteTransaction(transaction.id)
   }
 
   const dateChangeHandler = (ev) => {
-    changeTransactionDate(txId, ev.target.value)
+    changeTransactionDate(transaction.id, ev.target.value)
   }
 
   const sourceChangeHandler = (ev) => {
-    changeTransactionSource(txId, ev.target.value)
+    changeTransactionSource(transaction.id, ev.target.value)
   }
 
   const amountChangeHandler = (ev) => {
-    changeTransactionAmount(txId, ev.target.value)
+    changeTransactionAmount(transaction.id, ev.target.value)
   }
 
   return (

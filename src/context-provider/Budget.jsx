@@ -1,22 +1,24 @@
-import React, { useState } from 'react'
+import React from 'react'
 import BudgetDatePicker from '../common/BudgetDatePicker'
 import ActivityFilter from '../common/ActivityFilter'
 import MonthlyBudgets from './MonthlyBudgets'
 import { useBudget } from './BudgetProvider'
 
 export default function Budget () {
-  const { budget, changeBudgetName } = useBudget()
-  const [active, setActive] = useState('planned')
-  const [currentDate, setCurrentDate] = useState(new Date())
+  const { budget, changeActivity, changeBudgetName, changeCurrentDate } = useBudget()
+
+  const activityHandler = (val) => changeActivity(val)
+  const currentDateHandler = (val) => changeCurrentDate({ ...budget, currentDate: val })
+  const nameChangeHandler = (ev) => changeBudgetName(ev.target.value)
 
   return (
     <>
       <div className="flex justify-between items-center">
-        <input className="border-0 pl-0" type="text" value={budget.name} onInput={changeBudgetName} />
-        <BudgetDatePicker currentDate={currentDate} setCurrentDate={setCurrentDate} />
+        <input className="border-0 pl-0" type="text" value={budget.name} onInput={nameChangeHandler} />
+        <BudgetDatePicker currentDate={budget.currentDate} setCurrentDate={currentDateHandler} />
       </div>
-      <ActivityFilter active={active} setActive={setActive} />
-      <MonthlyBudgets active={active} currentDate={currentDate} />
+      <ActivityFilter active={budget.active} setActive={activityHandler} />
+      <MonthlyBudgets />
     </>
   )
 }

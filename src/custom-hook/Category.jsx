@@ -12,7 +12,7 @@ export default function Category ({ budget, category, setBudget }) {
     if (budget.active === 'actual') setAmount(category.actual)
     if (budget.active === 'planned') setAmount(category.planned)
     if (budget.active === 'remaining') setAmount(category.remaining)
-  }, [budget.active, category])
+  }, [budget.active, category.actual, category.planned, category.remaining])
 
   const updateName = (val) => {
     setBudget((cur) => {

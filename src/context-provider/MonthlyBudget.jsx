@@ -2,10 +2,10 @@
 import React from 'react'
 import Categories from './Categories'
 
-export default function MonthlyBudget ({ active, monthlyBudgetId }) {
+export default function MonthlyBudget () {
   return (
     <div className="h-[calc(100%-12rem)] overflow-y-auto">
-      <Categories active={active} monthlyBudgetId={monthlyBudgetId} />
+      <Categories />
     </div>
   )
 }
