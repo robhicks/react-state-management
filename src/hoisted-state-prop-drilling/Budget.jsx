@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import model from '../budget.model'
 import BudgetDatePicker from '../common/BudgetDatePicker'
 import ActivityFilter from '../common/ActivityFilter'
-import { get, set } from 'idb-keyval'
+import { get, set } from '../db'
 import MonthlyBudgets from './MonthlyBudgets'
 
 export default function Budget () {
