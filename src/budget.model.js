@@ -1,4 +1,5 @@
 export default {
+  active: 'planned',
   name: 'Family Budget',
   id: '55f83ae6-7e27-43e5-80be-6f0b4342fe03',
   monthlyBudgets: [
@@ -299,6 +300,5 @@ export default {
         ]
       }
     }
-  ],
-  active: 'planned'
+  ]
 }
