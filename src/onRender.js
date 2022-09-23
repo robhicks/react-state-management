@@ -2,7 +2,7 @@ const map = new Map()
 
 const consoleResults = () => {
   const values = map.values()
-  const mapped = [...values]?.reduce((p, c) => p + c)
+  const mapped = [...values]?.reduce((p, c) => p + c, 0)
   console.log('Duration: ', mapped)
 }
 

@@ -7,6 +7,7 @@ import CustomHook from './custom-hook'
 import ContextProvider from './context-provider'
 import MobX from './mobx'
 import Redux from './redux'
+import Recoil from './recoil'
 import onRender from './onRender'
 
 function App () {
@@ -25,6 +26,7 @@ function App () {
         <Route path="04-context-provider" element={<ContextProvider />} />
         <Route path="05-mobx" element={<MobX />} />
         <Route path="06-redux" element={<Redux />} />
+        <Route path="07-recoil" element={<Recoil />} />
       </Routes>
     </BrowserRouter>
   </Profiler >
