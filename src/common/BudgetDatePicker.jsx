@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react'
 import { mdiChevronLeftCircleOutline, mdiChevronRightCircleOutline } from '@mdi/js'
 import { add, format, sub } from 'date-fns'
