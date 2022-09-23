@@ -15,7 +15,7 @@ function App () {
     <Profiler id="app" onRender={onRender}>
     <BrowserRouter>
       <div className="navbar bg-primary">
-        <Link className="btn btn-ghost normal-case text-xl" to="/">Home</Link>
+        <Link className="btn btn-ghost normal-case text-xl text-white" to="/">Home</Link>
       </div>
       <Routes>
         <Route index element={<Home />}/>

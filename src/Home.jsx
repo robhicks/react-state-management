@@ -11,6 +11,7 @@ export default function Home () {
       <li><Link to="/05-mobx">05-mobx</Link></li>
       <li><Link to="/06-redux">06-redux</Link></li>
       <li><Link to="/07-recoil">07-recoil</Link></li>
+      <li><Link to="/08-synced-store">08-synced-store</Link></li>
     </ul>
   </div>)
 }
