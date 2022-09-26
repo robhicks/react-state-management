@@ -22,6 +22,15 @@ export class BudgetModel {
     item.transactions.push({ amount: 0, date: d.toISOString().substring(0, 10), id: uuid() })
   }
 
+  addMonthlyBudget = () => {
+    const month = this.currentDate.getMonth()
+    const year = this.currentDate.getFullYear()
+    const mb = copy(model.monthlyBudgets[0])
+    mb.month = month
+    mb.year = year
+    this.monthlyBudgets.push(mb)
+  }
+
   changeBudgetName = (name) => {
     this.name = name
   }

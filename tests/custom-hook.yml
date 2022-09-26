@@ -1,0 +1,9 @@
+config:
+  target: "http://localhost:5173"
+  engines:
+    playwright: {}
+  processor: "./custom-hook.cjs"
+scenarios:
+  - engine: playwright
+    flowFunction: "pageLoad"
+    flow: []

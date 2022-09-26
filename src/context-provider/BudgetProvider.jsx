@@ -33,6 +33,10 @@ export const BudgetProvider = ({ children }) => {
     setBudget({ ...budget, currentBudget })
   }, [budget.currentDate, budget.monthlyBudgets])
 
+  const addMonthlyBudget = (bud) => {
+    setBudget({ ...budget, ...bud })
+  }
+
   const addEmptyTransaction = (itemId) => {
     setBudget((cur) => {
       const bud = copy(cur)
@@ -146,6 +150,7 @@ export const BudgetProvider = ({ children }) => {
     <Budget.Provider
       value={{
         addEmptyTransaction,
+        addMonthlyBudget,
         budget,
         changeActivity,
         changeBudgetName,

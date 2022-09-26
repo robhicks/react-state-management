@@ -44,12 +44,14 @@ export default function Budget () {
   const currentDateHandler = (val) => dispatch({ type: 'SET_CURRENT_DATE', date: val })
   const nameChangeHandler = (ev) => dispatch({ type: 'CHANGE_BUDGET_NAME', name: ev.target.value })
 
-  return (<>
-    <div className="flex justify-between items-center">
-      <input className="border-0 pl-0" type="text" value={budget.name} onInput={nameChangeHandler} />
-      <BudgetDatePicker currentDate={budget.currentDate} setCurrentDate={currentDateHandler} />
+  return (
+    <div className="h-full">
+      <div className="flex justify-between items-center">
+        <input className="border-0 pl-0" type="text" value={budget.name} onInput={nameChangeHandler} />
+        <BudgetDatePicker currentDate={budget.currentDate} setCurrentDate={currentDateHandler} />
+      </div>
+      <ActivityFilter active={budget.active} setActive={activityHandler} />
+      <MonthlyBudgets budget={budget} dispatch={dispatch} />
     </div>
-    <ActivityFilter active={budget.active} setActive={activityHandler} />
-    <MonthlyBudgets budget={budget} dispatch={dispatch} />
-  </>)
+  )
 }

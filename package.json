@@ -8,7 +8,15 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "hoisted": "artillery run -o tests/hoisted.json tests/hoisted.yml",
+    "reducer": "artillery run -o tests/reducer.json tests/reducer.yml",
+    "custom-hook": "artillery run -o tests/custom-hook.json tests/custom-hook.yml",
+    "context-provider": "artillery run -o tests/context-provider.json tests/context-provider.yml",
+    "mobx": "artillery run -o tests/mobx.json tests/mobx.yml",
+    "redux": "artillery run -o tests/redux.json tests/redux.yml",
+    "recoil": "artillery run -o tests/recoil.json tests/recoil.yml",
+    "perf": "run-s hoisted reducer custom-hook context-provider mobx redux recoil"
   },
   "dependencies": {
     "@mdi/js": "^7.0.96",
@@ -33,6 +41,8 @@
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.1.0",
+    "artillery": "2.0.0-23",
+    "artillery-engine-playwright": "^0.2.0",
     "autoprefixer": "^10.4.12",
     "daisyui": "^2.31.0",
     "eslint": "^8.23.1",
@@ -41,6 +51,7 @@
     "eslint-plugin-n": "^15.3.0",
     "eslint-plugin-promise": "^6.0.1",
     "eslint-plugin-react": "^7.31.8",
+    "npm-run-all": "^4.1.5",
     "postcss": "^8.4.16",
     "react-test-renderer": "^18.2.0",
     "tailwindcss": "^3.1.8",

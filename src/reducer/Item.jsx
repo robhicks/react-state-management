@@ -29,7 +29,7 @@ export default function Item ({ budget, item, dispatch }) {
   }
 
   return (
-    <div className="bg-slate-50 mb-2 p-1">
+    <div className="w-8/12 mx-auto py-4 h-full">
       <div className="flex justify-between">
         <InPlaceEditor setValue={changeName} value={item.name}>{item.name}</InPlaceEditor>
         <div>{amount}</div>

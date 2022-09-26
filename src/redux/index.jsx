@@ -5,7 +5,7 @@ import { store } from './budget-store'
 
 export default function Redux () {
   return (
-    <div className="w-8/12 mx-auto py-4">
+    <div className="w-8/12 mx-auto py-4 h-full">
       <h1 className="prose prose-2xl mb-1">06-redux</h1>
         <Provider store={store}>
           <Budget />

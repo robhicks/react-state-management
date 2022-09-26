@@ -1,18 +1,18 @@
-import React, { Profiler } from 'react'
+import React, { lazy, Suspense } from 'react'
 import { BrowserRouter, Link, Routes, Route } from 'react-router-dom'
 import Home from './Home'
-import HoistedPropDrilling from './hoisted-state-prop-drilling'
-import ReactUseReducer from './reducer'
-import CustomHook from './custom-hook'
-import ContextProvider from './context-provider'
-import MobX from './mobx'
-import Redux from './redux'
-import Recoil from './recoil'
-import onRender from './onRender'
+// import onRender from './onRender'
+
+const HoistedPropDrilling = lazy(() => import('./hoisted-state-prop-drilling'))
+const ReactUseReducer = lazy(() => import('./reducer'))
+const CustomHook = lazy(() => import('./custom-hook'))
+const ContextProvider = lazy(() => import('./context-provider'))
+const MobX = lazy(() => import('./mobx'))
+const Redux = lazy(() => import('./redux'))
+const Recoil = lazy(() => import('./recoil'))
 
 function App () {
   return (
-    <Profiler id="app" onRender={onRender}>
     <BrowserRouter>
       <div className="navbar bg-primary">
         <Link className="btn btn-ghost normal-case text-xl text-white" to="/">Home</Link>
@@ -20,17 +20,18 @@ function App () {
       <Routes>
         <Route index element={<Home />}/>
         <Route path="home" element={<Home />}/>
-        <Route path="01-hoisted-props" element={<HoistedPropDrilling />} />
-        <Route path="02-use-reducer" element={<ReactUseReducer />} />
-        <Route path="03-custom-hook" element={<CustomHook />} />
-        <Route path="04-context-provider" element={<ContextProvider />} />
-        <Route path="05-mobx" element={<MobX />} />
-        <Route path="06-redux" element={<Redux />} />
-        <Route path="07-recoil" element={<Recoil />} />
+        <Route path="01-hoisted-props" element={<Suspense fallback={<div>Loading...</div>}><HoistedPropDrilling /></Suspense>} />
+        <Route path="02-custom-hook" element={<Suspense fallback={<div>Loading...</div>}><CustomHook /></Suspense>} />
+        <Route path="03-context-provider" element={<Suspense fallback={<div>Loading...</div>}><ContextProvider /></Suspense>} />
+        <Route path="04-use-reducer" element={<Suspense fallback={<div>Loading...</div>}><ReactUseReducer /></Suspense>} />
+        <Route path="05-mobx" element={<Suspense fallback={<div>Loading...</div>}><MobX /></Suspense>} />
+        <Route path="06-redux" element={<Suspense fallback={<div>Loading...</div>}><Redux /></Suspense>} />
+        <Route path="07-recoil" element={<Suspense fallback={<div>Loading...</div>}><Recoil /></Suspense>} />
       </Routes>
     </BrowserRouter>
-  </Profiler >
   )
 }
 
 export default App
+
+// <Profiler id="app" onRender={onRender}></Profiler >

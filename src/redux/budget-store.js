@@ -36,6 +36,19 @@ const budgetSlice = createSlice({
       save(ns)
       return ns
     },
+    addMonthlyBudget (state, { payload }) {
+      const bud = copy(state)
+      const date = deserialize(state.currentDate, dateReviver)
+      const month = date.getMonth()
+      const year = date.getFullYear()
+      const mb = copy(model.monthlyBudgets[0])
+      mb.month = month
+      mb.year = year
+      bud.monthlyBudgets.push(mb)
+      const ns = { ...state, ...bud, currentDate: currentDate(state.currentDate) }
+      save(ns)
+      return ns
+    },
     changeBudgetName (state, { payload }) {
       const ns = { ...state, name: payload }
       save(ns)
@@ -130,6 +143,7 @@ const budgetSlice = createSlice({
 
 export const {
   addEmptyTransaction,
+  addMonthlyBudget,
   changeBudgetName,
   changeCategoryName,
   changeItemName,

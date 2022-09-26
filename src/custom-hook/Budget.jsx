@@ -11,12 +11,14 @@ export default function Budget () {
   const currentDateHandler = (val) => setBudget({ ...budget, currentDate: val })
   const nameChangeHandler = (ev) => setBudget({ ...budget, name: ev.target.value })
 
-  return (<>
+  return (
+    <div className="h-full">
     <div className="flex justify-between items-center">
       <input className="border-0 pl-0" type="text" value={budget.name} onInput={nameChangeHandler} />
       <BudgetDatePicker currentDate={budget.currentDate} setCurrentDate={currentDateHandler} />
     </div>
     <ActivityFilter active={budget.active} setActive={activityHandler} />
     <MonthlyBudgets budget={budget} setBudget={setBudget} />
-  </>)
+  </div>
+  )
 }

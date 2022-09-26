@@ -12,8 +12,6 @@ const Item = ({ item }) => {
   const [amount, setAmount] = useState(0)
   const [planned, setPlanned] = useState(item.planned)
 
-  console.log('item', item)
-
   useEffect(() => {
     if (budget.active === 'actual') setAmount(item.actual)
     if (budget.active === 'planned') setAmount(item.planned)

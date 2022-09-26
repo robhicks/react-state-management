@@ -1,0 +1,35 @@
+{
+  "aggregate": {
+    "counters": {
+      "vusers.created_by_name.0": 1,
+      "vusers.created": 1,
+      "browser.http_requests": 47,
+      "vusers.failed": 1
+    },
+    "rates": {},
+    "firstCounterAt": 1664218360072,
+    "lastCounterAt": 1664218394940,
+    "firstMetricAt": 1664218360072,
+    "lastMetricAt": 1664218394940,
+    "period": 1664218390000,
+    "summaries": {},
+    "histograms": {}
+  },
+  "intermediate": [
+    {
+      "counters": {
+        "vusers.created_by_name.0": 1,
+        "vusers.created": 1,
+        "browser.http_requests": 47
+      },
+      "rates": {},
+      "firstCounterAt": 1664218360072,
+      "lastCounterAt": 1664218360961,
+      "firstMetricAt": 1664218360072,
+      "lastMetricAt": 1664218360961,
+      "period": "1664218360000",
+      "summaries": {},
+      "histograms": {}
+    }
+  ]
+}

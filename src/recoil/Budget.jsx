@@ -23,14 +23,14 @@ const Budget = () => {
   // console.log('budget', budget)
 
   return (
-    <>
+    <div className="h-full">
       <div className="flex justify-between items-center">
         <input className="border-0 pl-0" type="text" value={budget.name} onInput={nameChangeHandler} />
         <BudgetDatePicker currentDate={budget.currentDate} setCurrentDate={currentDateHandler} />
       </div>
       <ActivityFilter active={budget.active} setActive={activityHandler} />
       <MonthlyBudgets />
-    </>
+    </div>
   )
 }
 

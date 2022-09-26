@@ -1,0 +1,235 @@
+{
+  "aggregate": {
+    "counters": {
+      "vusers.created_by_name.0": 1,
+      "vusers.created": 1,
+      "browser.http_requests": 48,
+      "vusers.failed": 1
+    },
+    "rates": {},
+    "firstCounterAt": 1664218277699,
+    "firstHistogramAt": 1664218278438,
+    "lastCounterAt": 1664218312628,
+    "lastHistogramAt": 1664218278658,
+    "firstMetricAt": 1664218277699,
+    "lastMetricAt": 1664218312628,
+    "period": 1664218310000,
+    "summaries": {
+      "browser.page.TTFB.http://localhost:5173/02-custom-hook": {
+        "min": 7.3,
+        "max": 7.3,
+        "count": 1,
+        "p50": 7.3,
+        "median": 7.3,
+        "p75": 7.3,
+        "p90": 7.3,
+        "p95": 7.3,
+        "p99": 7.3,
+        "p999": 7.3
+      },
+      "browser.page.FCP.http://localhost:5173/02-custom-hook": {
+        "min": 139.7,
+        "max": 139.7,
+        "count": 1,
+        "p50": 138.4,
+        "median": 138.4,
+        "p75": 138.4,
+        "p90": 138.4,
+        "p95": 138.4,
+        "p99": 138.4,
+        "p999": 138.4
+      },
+      "browser.page.LCP.http://localhost:5173/02-custom-hook": {
+        "min": 250.3,
+        "max": 250.3,
+        "count": 1,
+        "p50": 252.2,
+        "median": 252.2,
+        "p75": 252.2,
+        "p90": 252.2,
+        "p95": 252.2,
+        "p99": 252.2,
+        "p999": 252.2
+      },
+      "browser.page.FID.http://localhost:5173/02-custom-hook": {
+        "min": 2.3,
+        "max": 2.3,
+        "count": 1,
+        "p50": 2.3,
+        "median": 2.3,
+        "p75": 2.3,
+        "p90": 2.3,
+        "p95": 2.3,
+        "p99": 2.3,
+        "p999": 2.3
+      }
+    },
+    "histograms": {
+      "browser.page.TTFB.http://localhost:5173/02-custom-hook": {
+        "min": 7.3,
+        "max": 7.3,
+        "count": 1,
+        "p50": 7.3,
+        "median": 7.3,
+        "p75": 7.3,
+        "p90": 7.3,
+        "p95": 7.3,
+        "p99": 7.3,
+        "p999": 7.3
+      },
+      "browser.page.FCP.http://localhost:5173/02-custom-hook": {
+        "min": 139.7,
+        "max": 139.7,
+        "count": 1,
+        "p50": 138.4,
+        "median": 138.4,
+        "p75": 138.4,
+        "p90": 138.4,
+        "p95": 138.4,
+        "p99": 138.4,
+        "p999": 138.4
+      },
+      "browser.page.LCP.http://localhost:5173/02-custom-hook": {
+        "min": 250.3,
+        "max": 250.3,
+        "count": 1,
+        "p50": 252.2,
+        "median": 252.2,
+        "p75": 252.2,
+        "p90": 252.2,
+        "p95": 252.2,
+        "p99": 252.2,
+        "p999": 252.2
+      },
+      "browser.page.FID.http://localhost:5173/02-custom-hook": {
+        "min": 2.3,
+        "max": 2.3,
+        "count": 1,
+        "p50": 2.3,
+        "median": 2.3,
+        "p75": 2.3,
+        "p90": 2.3,
+        "p95": 2.3,
+        "p99": 2.3,
+        "p999": 2.3
+      }
+    }
+  },
+  "intermediate": [
+    {
+      "counters": {
+        "vusers.created_by_name.0": 1,
+        "vusers.created": 1,
+        "browser.http_requests": 48
+      },
+      "rates": {},
+      "firstCounterAt": 1664218277699,
+      "firstHistogramAt": 1664218278438,
+      "lastCounterAt": 1664218278539,
+      "lastHistogramAt": 1664218278658,
+      "firstMetricAt": 1664218277699,
+      "lastMetricAt": 1664218278658,
+      "period": "1664218270000",
+      "summaries": {
+        "browser.page.TTFB.http://localhost:5173/02-custom-hook": {
+          "min": 7.3,
+          "max": 7.3,
+          "count": 1,
+          "p50": 7.3,
+          "median": 7.3,
+          "p75": 7.3,
+          "p90": 7.3,
+          "p95": 7.3,
+          "p99": 7.3,
+          "p999": 7.3
+        },
+        "browser.page.FCP.http://localhost:5173/02-custom-hook": {
+          "min": 139.7,
+          "max": 139.7,
+          "count": 1,
+          "p50": 138.4,
+          "median": 138.4,
+          "p75": 138.4,
+          "p90": 138.4,
+          "p95": 138.4,
+          "p99": 138.4,
+          "p999": 138.4
+        },
+        "browser.page.LCP.http://localhost:5173/02-custom-hook": {
+          "min": 250.3,
+          "max": 250.3,
+          "count": 1,
+          "p50": 252.2,
+          "median": 252.2,
+          "p75": 252.2,
+          "p90": 252.2,
+          "p95": 252.2,
+          "p99": 252.2,
+          "p999": 252.2
+        },
+        "browser.page.FID.http://localhost:5173/02-custom-hook": {
+          "min": 2.3,
+          "max": 2.3,
+          "count": 1,
+          "p50": 2.3,
+          "median": 2.3,
+          "p75": 2.3,
+          "p90": 2.3,
+          "p95": 2.3,
+          "p99": 2.3,
+          "p999": 2.3
+        }
+      },
+      "histograms": {
+        "browser.page.TTFB.http://localhost:5173/02-custom-hook": {
+          "min": 7.3,
+          "max": 7.3,
+          "count": 1,
+          "p50": 7.3,
+          "median": 7.3,
+          "p75": 7.3,
+          "p90": 7.3,
+          "p95": 7.3,
+          "p99": 7.3,
+          "p999": 7.3
+        },
+        "browser.page.FCP.http://localhost:5173/02-custom-hook": {
+          "min": 139.7,
+          "max": 139.7,
+          "count": 1,
+          "p50": 138.4,
+          "median": 138.4,
+          "p75": 138.4,
+          "p90": 138.4,
+          "p95": 138.4,
+          "p99": 138.4,
+          "p999": 138.4
+        },
+        "browser.page.LCP.http://localhost:5173/02-custom-hook": {
+          "min": 250.3,
+          "max": 250.3,
+          "count": 1,
+          "p50": 252.2,
+          "median": 252.2,
+          "p75": 252.2,
+          "p90": 252.2,
+          "p95": 252.2,
+          "p99": 252.2,
+          "p999": 252.2
+        },
+        "browser.page.FID.http://localhost:5173/02-custom-hook": {
+          "min": 2.3,
+          "max": 2.3,
+          "count": 1,
+          "p50": 2.3,
+          "median": 2.3,
+          "p75": 2.3,
+          "p90": 2.3,
+          "p95": 2.3,
+          "p99": 2.3,
+          "p999": 2.3
+        }
+      }
+    }
+  ]
+}

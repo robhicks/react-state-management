@@ -18,19 +18,18 @@ export default function Budget () {
     })()
   }, [])
 
-  const changeName = (ev) => {
-    dispatch(changeBudgetName(ev.target.value))
-  }
-
+  const changeName = (ev) => dispatch(changeBudgetName(ev.target.value))
   const changeActivity = (val) => dispatch(setActive(val))
   const dateChangeHandler = (val) => dispatch(setCurrentDate(serialize(val)))
 
-  return (<>
-    <div className="flex justify-between items-center">
-      <input className="border-0 pl-0" type="text" value={budget.name || ''} onInput={changeName} />
-      <BudgetDatePicker currentDate={deserialize(budget.currentDate, dateReviver)} setCurrentDate={dateChangeHandler} />
+  return (
+    <div className="h-full">
+      <div className="flex justify-between items-center">
+        <input className="border-0 pl-0" type="text" value={budget.name || ''} onInput={changeName} />
+        <BudgetDatePicker currentDate={deserialize(budget.currentDate, dateReviver)} setCurrentDate={dateChangeHandler} />
+      </div>
+      <ActivityFilter active={budget.active} setActive={changeActivity} />
+      <MonthlyBudgets />
     </div>
-    <ActivityFilter active={budget.active} setActive={changeActivity} />
-    <MonthlyBudgets />
-  </>)
+  )
 }

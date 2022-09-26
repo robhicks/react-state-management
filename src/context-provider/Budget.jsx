@@ -8,7 +8,7 @@ export default function Budget () {
   const { budget, changeActivity, changeBudgetName, changeCurrentDate } = useBudget()
 
   const activityHandler = (val) => changeActivity(val)
-  const currentDateHandler = (val) => changeCurrentDate({ ...budget, currentDate: val })
+  const currentDateHandler = (val) => changeCurrentDate(val)
   const nameChangeHandler = (ev) => changeBudgetName(ev.target.value)
 
   return (

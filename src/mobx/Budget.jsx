@@ -11,14 +11,14 @@ const Budget = observer(() => {
   const nameChangeHandler = (ev) => budget.changeBudgetName(ev.target.value)
 
   return (
-    <>
+    <div className="h-full">
       <div className="flex justify-between items-center">
         <input className="border-0 pl-0" type="text" value={budget.name} onInput={nameChangeHandler} />
         <BudgetDatePicker currentDate={budget.currentDate} setCurrentDate={budget.setCurrentDate} />
       </div>
       <ActivityFilter active={budget.active} setActive={budget.setActive} />
       <MonthlyBudgets />
-    </>
+    </div>
   )
 })
 

@@ -1,10 +1,30 @@
 import { copy, getItemData, getCategoryData, getTransactionData, reducer as amountReducer, uuid } from '../utils'
+import model from '../budget.model'
 
 const reducer = (state, action) => {
   // console.log('action', action)
   switch (action.type) {
     case 'LOAD_FROM_STORAGE': {
       const newState = { ...state, ...action.data }
+      return newState
+    }
+    case 'ADD_EMPTY_TRANSACTION': {
+      const budget = copy(state)
+      const { item } = getItemData(budget, action.itemId)
+      const d = new Date()
+      item.transactions.push({ amount: 0, date: d.toISOString().substring(0, 10), id: uuid() })
+      const newState = { ...state, ...budget }
+      return newState
+    }
+    case 'ADD_MONTHLY_BUDGET': {
+      const bud = copy(state)
+      const month = state.currentDate.getMonth()
+      const year = state.currentDate.getFullYear()
+      const mb = copy(model.monthlyBudgets[0])
+      mb.month = month
+      mb.year = year
+      bud.monthlyBudgets.push(mb)
+      const newState = { ...state, ...bud }
       return newState
     }
     case 'CHANGE_BUDGET_NAME': {
@@ -31,14 +51,6 @@ const reducer = (state, action) => {
       item.planned = Number(action.amount)
       category.planned = category.items.reduce((p, c) => amountReducer(p, c, 'planned'), 0)
       category.remaining = category.planned - category.actual
-      const newState = { ...state, ...budget }
-      return newState
-    }
-    case 'ADD_EMPTY_TRANSACTION': {
-      const budget = copy(state)
-      const { item } = getItemData(budget, action.itemId)
-      const d = new Date()
-      item.transactions.push({ amount: 0, date: d.toISOString().substring(0, 10), id: uuid() })
       const newState = { ...state, ...budget }
       return newState
     }
