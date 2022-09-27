@@ -7,11 +7,11 @@
       "vusers.failed": 1
     },
     "rates": {},
-    "firstCounterAt": 1664218236516,
-    "lastCounterAt": 1664218267235,
-    "firstMetricAt": 1664218236516,
-    "lastMetricAt": 1664218267235,
-    "period": 1664218260000,
+    "firstCounterAt": 1664281310081,
+    "lastCounterAt": 1664281340856,
+    "firstMetricAt": 1664281310081,
+    "lastMetricAt": 1664281340856,
+    "period": 1664281340000,
     "summaries": {},
     "histograms": {}
   },
@@ -23,11 +23,11 @@
         "browser.http_requests": 16
       },
       "rates": {},
-      "firstCounterAt": 1664218236516,
-      "lastCounterAt": 1664218237190,
-      "firstMetricAt": 1664218236516,
-      "lastMetricAt": 1664218237190,
-      "period": "1664218230000",
+      "firstCounterAt": 1664281310081,
+      "lastCounterAt": 1664281310802,
+      "firstMetricAt": 1664281310081,
+      "lastMetricAt": 1664281310802,
+      "period": "1664281310000",
       "summaries": {},
       "histograms": {}
     }

@@ -9,7 +9,7 @@ const key = 'budget'
 export const Budget = createContext({})
 
 export const BudgetProvider = ({ children }) => {
-  const [budget, setBudget] = useState(model)
+  const [budget, setBudget] = useState({...model, currentDate: new Date()})
 
   // load from IndexedDB
   useEffect(() => {
