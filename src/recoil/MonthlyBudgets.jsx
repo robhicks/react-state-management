@@ -2,8 +2,7 @@
 import React from 'react'
 import MonthlyBudget from './MonthlyBudget'
 import { useRecoilState } from 'recoil'
-import budgetState from './budgetState'
-import model from '../budget.model'
+import budgetState, { model } from './budgetState'
 import { copy } from '../utils'
 
 const MonthlyBudgets = () => {

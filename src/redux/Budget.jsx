@@ -1,22 +1,14 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import BudgetDatePicker from '../common/BudgetDatePicker'
 import ActivityFilter from '../common/ActivityFilter'
 import MonthlyBudgets from './MonthlyBudgets'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectBudget, changeBudgetName, loadFromStorage, setActive, setCurrentDate } from './budget-store'
 import { dateReviver, deserialize, serialize } from '../utils'
-import { get } from '../db'
 
 export default function Budget () {
   const budget = useSelector(selectBudget)
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    ;(async () => {
-      const storedBudget = await get('budget')
-      if (storedBudget) dispatch(loadFromStorage(storedBudget))
-    })()
-  }, [])
 
   const changeName = (ev) => dispatch(changeBudgetName(ev.target.value))
   const changeActivity = (val) => dispatch(setActive(val))

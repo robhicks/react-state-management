@@ -1,36 +1,14 @@
 import React, { useEffect, useRef, useReducer } from 'react'
-import model from '../budget.model'
 import BudgetDatePicker from '../common/BudgetDatePicker'
 import ActivityFilter from '../common/ActivityFilter'
-import { get, set } from '../db'
 import MonthlyBudgets from './MonthlyBudgets'
-import reducer from './reducer'
+import reducer, { model } from './reducer'
 
 const initialState = { ...model, active: 'planned', currentDate: new Date() }
 
 export default function Budget () {
   const [budget, dispatch] = useReducer(reducer, initialState)
   const loaded = useRef(false)
-
-  const key = 'budget'
-
-  // load from IndexedDB
-  useEffect(() => {
-    if (!loaded.current) {
-      loaded.current = true
-      get(key).then((bud) => {
-        if (bud) {
-          const newState = { ...model, ...bud, active: 'planned', currentDate: new Date() }
-          dispatch({ type: 'LOAD_FROM_STORAGE', data: newState })
-        }
-      })
-    }
-  }, [])
-
-  // save to IndexedDb
-  useEffect(() => {
-    set(key, ({ id: budget.id, name: budget.name, monthlyBudgets: budget.monthlyBudgets }))
-  }, [budget.id, budget.name, budget.monthlyBudgets])
 
   useEffect(() => {
     const d = budget?.currentDate ? new Date(budget.currentDate) : new Date()

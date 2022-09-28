@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
 import MonthlyBudget from './MonthlyBudget'
-import model from '../budget.model'
 import { copy } from '../utils'
 
 export default function MonthlyBudgets ({ budget, setBudget }) {
@@ -9,7 +8,7 @@ export default function MonthlyBudgets ({ budget, setBudget }) {
     const bud = copy(budget)
     const month = budget.currentDate.getMonth()
     const year = budget.currentDate.getFullYear()
-    const mb = copy(model.monthlyBudgets[0])
+    const mb = copy(budget.monthlyBudgets[0])
     mb.month = month
     mb.year = year
     bud.monthlyBudgets.push(mb)

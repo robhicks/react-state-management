@@ -1,20 +1,12 @@
 import { createSlice, configureStore } from '@reduxjs/toolkit'
-import model from '../budget.model'
 import { copy, dateReviver, deserialize, getCategoryData, getItemData, getTransactionData, reducer, serialize, uuid } from '../utils'
-import { set } from '../db'
 import add from 'date-fns/add'
+import getModel from '../utils/budget-model-generator'
 
+const model = getModel()
 if (!model.active) model.active = 'planned'
 if (!model.currentDate) model.currentDate = serialize(new Date())
 
-const key = 'budget'
-
-const save = (storageObject) => {
-  const newStorageObject = copy(storageObject)
-  delete newStorageObject.currentMonthlyBudget
-  // console.log('newStorageObject', newStorageObject)
-  set(key, newStorageObject)
-}
 
 const currentDate = (date) => {
   let d = deserialize(date, dateReviver)
@@ -33,7 +25,6 @@ const budgetSlice = createSlice({
       const d = new Date()
       item.transactions.push({ amount: 0, date: d.toISOString().substring(0, 10), id: uuid() })
       const ns = { ...state, ...bud, currentDate: currentDate(state.currentDate) }
-      save(ns)
       return ns
     },
     addMonthlyBudget (state, { payload }) {
@@ -46,7 +37,6 @@ const budgetSlice = createSlice({
       mb.year = year
       bud.monthlyBudgets.push(mb)
       const ns = { ...state, ...bud, currentDate: currentDate(state.currentDate) }
-      save(ns)
       return ns
     },
     changeBudgetName (state, { payload }) {
@@ -59,7 +49,6 @@ const budgetSlice = createSlice({
       const { category } = getCategoryData(bud, payload.categoryId)
       category.name = payload.name
       const ns = { ...state, ...bud, currentDate: currentDate(state.currentDate) }
-      save(ns)
       return ns
     },
     changeItemName (state, { payload }) {
@@ -67,7 +56,6 @@ const budgetSlice = createSlice({
       const { item } = getItemData(bud, payload.itemId)
       item.name = payload.name
       const ns = { ...state, ...bud, currentDate: currentDate(state.currentDate) }
-      save(ns)
       return ns
     },
     changeItemPlannedAmount (state, { payload: { itemId, amount } }) {
@@ -77,7 +65,6 @@ const budgetSlice = createSlice({
       category.planned = category.items.reduce((p, c) => reducer(p, c, 'planned'))
       category.remaining = category.planned - category.actual
       const ns = { ...state, ...bud, currentDate: currentDate(state.currentDate) }
-      save(ns)
       return ns
     },
     changeTransactionAmount (state, { payload: { txId, amount } }) {
@@ -89,7 +76,6 @@ const budgetSlice = createSlice({
       category.actual = category.items.reduce((p, c) => reducer(p, c, 'actual'), 0)
       category.remaining = category.planned - category.actual
       const ns = { ...state, ...bud, currentDate: currentDate(state.currentDate) }
-      save(ns)
       return ns
     },
 
@@ -98,7 +84,6 @@ const budgetSlice = createSlice({
       const { transaction } = getTransactionData(bud, txId)
       transaction.date = date
       const ns = { ...state, ...bud, currentDate: currentDate(state.currentDate) }
-      save(ns)
       return ns
     },
     changeTransactionSource (state, { payload: { txId, source } }) {
@@ -106,7 +91,6 @@ const budgetSlice = createSlice({
       const { transaction } = getTransactionData(bud, txId)
       transaction.source = source
       const ns = { ...state, ...bud, currentDate: currentDate(state.currentDate) }
-      save(ns)
       return ns
     },
     deleteTransaction (state, { payload: { txId } }) {
@@ -118,7 +102,6 @@ const budgetSlice = createSlice({
       category.actual = category.items.reduce((p, c) => reducer(p, c, 'actual'), 0)
       category.remaining = category.planned - category.actual
       const ns = { ...state, ...bud, currentDate: currentDate(state.currentDate) }
-      save(ns)
       return ns
     },
     loadFromStorage (state, { payload }) {
@@ -127,12 +110,10 @@ const budgetSlice = createSlice({
     },
     setActive (state, { payload }) {
       const ns = { ...state, active: payload }
-      save(ns)
       return ns
     },
     setCurrentDate (state, { payload }) {
       const ns = { ...state, currentDate: payload }
-      save(ns)
       return ns
     },
     setCurrentMonthlyBudget (state, { payload }) {

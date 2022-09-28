@@ -1,5 +1,8 @@
 import { writeFile } from 'fs/promises'
 import { test, expect } from '@playwright/test'
+import { join } from 'path'
+
+const root = process.cwd()
 
 test('test', async ({ page }) => {
   // Go to http://localhost:5173/
@@ -9,22 +12,19 @@ test('test', async ({ page }) => {
   await page.locator('text=07-recoil').click()
   await expect(page).toHaveURL('http://localhost:5173/07-recoil')
 
-  await page.locator('#previous-month').click()
-  await page.locator('button:has-text("Create Monthly Budget")').click()
-  await page.locator('#next-month').click()
   await page.locator('#next-month').click()
   await page.locator('button:has-text("Create Monthly Budget")').click()
 
   const navigationTimingJson = await page.evaluate(() => performance.getEntriesByType('navigation'))
 
-  await writeFile('recoil-navigation-timing.json', JSON.stringify(navigationTimingJson))
+  await writeFile(join(root, 'perf-results', 'recoil-navigation-timing.json'), JSON.stringify(navigationTimingJson))
 
   const resourceTimingJson = await page.evaluate(() => performance.getEntriesByType('resource'))
 
-  await writeFile('recoil-resource-timing.json', JSON.stringify(resourceTimingJson))
+  await writeFile(join(root, 'perf-results', 'recoil-resource-timing.json'), JSON.stringify(resourceTimingJson))
 
   const paintTimingJson = await page.evaluate(() => performance.getEntriesByType('paint'))
-  await writeFile('recoil-paint-timing.json', JSON.stringify(paintTimingJson))
+  await writeFile(join(root, 'perf-results', 'recoil-paint-timing.json'), JSON.stringify(paintTimingJson))
 
 
   const largestContentfulPaint = await page.evaluate(() => {
@@ -41,7 +41,7 @@ test('test', async ({ page }) => {
     })
   })
 
-  await writeFile('recoil-lcp.json', JSON.stringify(largestContentfulPaint))
+  await writeFile(join(root, 'perf-results', 'recoil-lcp.json'), JSON.stringify(largestContentfulPaint))
 
   const cummulativeLayoutShift = await page.evaluate(() => {
     return new Promise((resolve) => {
@@ -64,7 +64,7 @@ test('test', async ({ page }) => {
     })
   })
 
-  await writeFile('recoil-cls.json', JSON.stringify(cummulativeLayoutShift))
+  await writeFile(join(root, 'perf-results', 'recoil-cls.json'), JSON.stringify(cummulativeLayoutShift))
 
   const totalBlockingTime = await page.evaluate(() => {
     return new Promise((resolve) => {
@@ -82,5 +82,5 @@ test('test', async ({ page }) => {
     })
   })
 
-  await writeFile('recoil-total-blocking-time.json', JSON.stringify(totalBlockingTime))
+  await writeFile(join(root, 'perf-results', 'recoil-total-blocking-time.json'), JSON.stringify(totalBlockingTime))
 })

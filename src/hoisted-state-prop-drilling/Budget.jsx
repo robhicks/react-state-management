@@ -1,28 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import model from '../budget.model'
+import getModel from '../utils/budget-model-generator'
 import BudgetDatePicker from '../common/BudgetDatePicker'
 import ActivityFilter from '../common/ActivityFilter'
-import { get, set } from '../db'
 import MonthlyBudgets from './MonthlyBudgets'
+
+const model = getModel()
 
 export default function Budget () {
   const [budget, setBudget] = useState({ ...model, currentDate: new Date() })
-
-  const key = 'budget'
-
-  // load from IndexedDB
-  useEffect(() => {
-    get(key).then((bud) => {
-      if (bud) {
-        setBudget(({ ...model, ...bud, currentDate: new Date() }))
-      }
-    })
-  }, [])
-
-  // save to IndexedDb
-  useEffect(() => {
-    set(key, ({ id: budget.id, name: budget.name, monthlyBudgets: budget.monthlyBudgets }))
-  }, [budget.id, budget.name, budget.monthlyBudgets])
 
   useEffect(() => {
     const d = budget?.currentDate ? new Date(budget.currentDate) : new Date()

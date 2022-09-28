@@ -1,5 +1,4 @@
 import categoryGenerator from './category-generator'
-import add from 'date-fns/add'
 
 import { uuid } from './index'
 
@@ -12,8 +11,7 @@ const mbTargets = [
   {month: 5, year: 2022},
   {month: 6, year: 2022},
   {month: 7, year: 2022},
-  {month: 8, year: 2022},
-  {month: 9, year: 2022},
+  {month: 8, year: 2022}
 ]
 
 const budget = {
@@ -23,19 +21,22 @@ const budget = {
   monthlyBudgets: []
 }
 
-mbTargets.forEach((mb) => {
-  budget.monthlyBudgets.push({
-    id: uuid(),
-    month: mb.month,
-    year: mb.year,
-    planned: 0,
-    actual: 0,
-    remaining: 0,
-    categories: {
-      income: categoryGenerator('income'),
-      expense: categoryGenerator('expense'),
-    }
+export default () => {
+  mbTargets.forEach((mb) => {
+    budget.monthlyBudgets.push({
+      id: uuid(),
+      month: mb.month,
+      year: mb.year,
+      planned: 0,
+      actual: 0,
+      remaining: 0,
+      categories: {
+        income: categoryGenerator('income', mb.month, mb.year),
+        expense: categoryGenerator('expense', mb.month, mb.year),
+      }
+    })
   })
-})
+  
+  return budget
+}
 
-return budget

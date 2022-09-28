@@ -1,9 +1,8 @@
-import { autorun, makeAutoObservable } from 'mobx'
-import model from '../budget.model'
-import { get, set } from '../db'
+import { makeAutoObservable } from 'mobx'
 import { copy, getCategoryData, getItemData, getTransactionData, reducer, uuid } from '../utils'
+import getModel from '../utils/budget-model-generator'
 
-const key = 'budget'
+const model = getModel()
 
 export class BudgetModel {
   constructor (model) {
@@ -13,7 +12,6 @@ export class BudgetModel {
     this.monthlyBudgets = model.monthlyBudgets
     this.name = model.name
     makeAutoObservable(this)
-    this.loadFromStorage()
   }
 
   addEmptyTransaction = (itemId) => {
@@ -80,14 +78,6 @@ export class BudgetModel {
     category.remaining = category.planned - category.actual
   }
 
-  async loadFromStorage () {
-    const storedBudget = await get(key)
-    if (storedBudget.id && storedBudget.name && storedBudget.monthlyBudgets) {
-      this.name = storedBudget.name
-      this.monthlyBudgets = storedBudget.monthlyBudgets
-    }
-  }
-
   setActive = (filter) => {
     this.active = filter
   }
@@ -110,10 +100,5 @@ export class BudgetModel {
 }
 
 const store = new BudgetModel(model)
-
-autorun(() => {
-  const storageObject = copy({ id: store.id, name: store.name, monthlyBudgets: store.monthlyBudgets })
-  set(key, storageObject)
-})
 
 export default store

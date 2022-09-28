@@ -1,8 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
 import MonthlyBudget from './MonthlyBudget'
-import { useBudget } from './BudgetProvider'
-import model from '../budget.model'
+import { useBudget, model } from './BudgetProvider'
 import { copy } from '../utils'
 
 export default function MonthlyBudgets () {

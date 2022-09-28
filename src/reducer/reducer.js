@@ -1,13 +1,11 @@
 import { copy, getItemData, getCategoryData, getTransactionData, reducer as amountReducer, uuid } from '../utils'
-import model from '../budget.model'
+import getModel from '../utils/budget-model-generator'
+
+export const model = getModel()
 
 const reducer = (state, action) => {
   // console.log('action', action)
   switch (action.type) {
-    case 'LOAD_FROM_STORAGE': {
-      const newState = { ...state, ...action.data }
-      return newState
-    }
     case 'ADD_EMPTY_TRANSACTION': {
       const budget = copy(state)
       const { item } = getItemData(budget, action.itemId)
