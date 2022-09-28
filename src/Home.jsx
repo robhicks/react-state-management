@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 export default function Home () {
   return (<div className="w-3/4 mx-auto pt-8">
-    <ul>
+    <ul className="text-xl">
       <li><Link to="/01-hoisted-props">01-hoisted-state-prop-drilling</Link></li>
       <li><Link to="/02-custom-hook">02-custom-hook</Link></li>
       <li><Link to="/03-context-provider">03-context-provider</Link></li>
@@ -14,3 +14,4 @@ export default function Home () {
     </ul>
   </div>)
 }
+  
