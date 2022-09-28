@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "node server",
+    "dev:vite": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
@@ -23,6 +24,7 @@
     "@reduxjs/toolkit": "^1.8.5",
     "date-fns": "^2.29.3",
     "dexie": "^3.2.2",
+    "express": "^4.18.1",
     "idb-keyval": "^6.2.0",
     "localforage": "^1.10.0",
     "lodash.merge": "^4.6.2",
