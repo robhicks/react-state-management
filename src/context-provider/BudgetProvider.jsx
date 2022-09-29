@@ -8,7 +8,7 @@ export const model = getModel()
 export const Budget = createContext({})
 
 export const BudgetProvider = ({ children }) => {
-  const [budget, setBudget] = useState({...model, currentDate: new Date()})
+  const [budget, setBudget] = useState({ ...model, currentDate: new Date() })
 
   useEffect(() => {
     const d = budget?.currentDate ? new Date(budget.currentDate) : new Date()
