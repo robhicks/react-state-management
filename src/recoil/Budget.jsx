@@ -4,6 +4,7 @@ import ActivityFilter from '../common/ActivityFilter'
 import { useRecoilState } from 'recoil'
 import budgetState from './budgetState'
 import MonthlyBudgets from './MonthlyBudgets'
+import InPlaceEditor from '../common/InPlaceEditor'
 
 const Budget = () => {
   const [budget, setBudget] = useRecoilState(budgetState)
@@ -18,14 +19,14 @@ const Budget = () => {
 
   const activityHandler = (val) => setBudget({ ...budget, active: val })
   const currentDateHandler = (val) => setBudget({ ...budget, currentDate: val })
-  const nameChangeHandler = (ev) => setBudget({ ...budget, name: ev.target.value })
+  const nameChangeHandler = (val) => setBudget({ ...budget, name: val })
 
   // console.log('budget', budget)
 
   return (
     <div className="h-full">
       <div className="flex justify-between items-center">
-        <input className="border-0 pl-0 text-xl outline-none" type="text" value={budget.name} onInput={nameChangeHandler} />
+        <InPlaceEditor setValue={nameChangeHandler} value={budget.name} />
         <BudgetDatePicker currentDate={budget.currentDate} setCurrentDate={currentDateHandler} />
       </div>
       <ActivityFilter active={budget.active} setActive={activityHandler} />

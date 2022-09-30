@@ -7,8 +7,16 @@ export default function InPlaceEditor ({ setValue, value }) {
   const inputEl = useRef(null)
 
   const changeHandler = (ev) => {
-    setLocalVal(ev.target.value)
-    setValue(ev.target.value)
+    const { value } = ev.target
+    setLocalVal(value)
+    setValue(value)
+  }
+
+  const keydownHandler = (e) => {
+    const { key } = e
+    if (key === 'Enter' || key === 'Escape') {
+      setEdit(false)
+    }
   }
 
   const setMode = () => {
@@ -22,8 +30,8 @@ export default function InPlaceEditor ({ setValue, value }) {
 
   return (
     <>
-      <input ref={inputEl} className={`border-0 ${!edit && 'hidden'}`} type="text" value={localVal || ''} onInput={changeHandler} onBlur={() => setEdit(false)} />
-      <span className={`${edit && 'hidden'}`} onClick={setMode}>{localVal}</span>
+      <input ref={inputEl} className={`border-0 outline-none pl-0 text-xl ${!edit && 'hidden'}`} type="text" value={localVal || ''} onKeyDown={keydownHandler} onInput={changeHandler} onBlur={() => setEdit(false)} />
+      <span className={` text-xl py-2 pr-1 ${edit && 'hidden'}`} onClick={setMode}>{localVal}</span>
     </>
   )
 }

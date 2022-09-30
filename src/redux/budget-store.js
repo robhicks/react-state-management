@@ -7,7 +7,6 @@ const model = getModel()
 if (!model.active) model.active = 'planned'
 if (!model.currentDate) model.currentDate = serialize(new Date())
 
-
 const currentDate = (date) => {
   let d = deserialize(date, dateReviver)
   d = add(d, { seconds: 1 })
@@ -41,7 +40,6 @@ const budgetSlice = createSlice({
     },
     changeBudgetName (state, { payload }) {
       const ns = { ...state, name: payload }
-      save(ns)
       return ns
     },
     changeCategoryName (state, { payload }) {
