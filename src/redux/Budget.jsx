@@ -18,7 +18,7 @@ export default function Budget () {
   return (
     <div className="h-full">
       <div className="flex justify-between items-center">
-        <InPlaceEditor setValue={nameChangeHandler} value={budget.name} />
+        <div><InPlaceEditor setValue={nameChangeHandler} value={budget.name} /> {budget.planned - budget.actual || 0}</div>
         <BudgetDatePicker currentDate={deserialize(budget.currentDate, dateReviver)} setCurrentDate={dateChangeHandler} />
       </div>
       <ActivityFilter active={budget.active} setActive={changeActivity} />
