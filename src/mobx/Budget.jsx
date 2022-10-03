@@ -5,6 +5,7 @@ import MonthlyBudgets from './MonthlyBudgets'
 import { observer } from 'mobx-react-lite'
 import store from './BudgetModel'
 import InPlaceEditor from '../common/InPlaceEditor'
+import { currency } from '../utils'
 
 const Budget = observer(() => {
   const [budget] = useState(store)
@@ -14,7 +15,7 @@ const Budget = observer(() => {
   return (
     <div className="h-full">
       <div className="flex justify-between items-center">
-        <div><InPlaceEditor setValue={nameChangeHandler} value={budget.name} /> {budget.planned - budget.actual || 0}</div>
+        <div><InPlaceEditor setValue={nameChangeHandler} value={budget.name} /> {currency(budget.remaining)}</div>
         <BudgetDatePicker currentDate={budget.currentDate} setCurrentDate={budget.setCurrentDate} />
       </div>
       <ActivityFilter active={budget.active} setActive={budget.setActive} />

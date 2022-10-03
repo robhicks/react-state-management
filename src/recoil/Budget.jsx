@@ -5,6 +5,7 @@ import { useRecoilState } from 'recoil'
 import budgetState from './budgetState'
 import MonthlyBudgets from './MonthlyBudgets'
 import InPlaceEditor from '../common/InPlaceEditor'
+import { currency } from '../utils'
 
 const Budget = () => {
   const [budget, setBudget] = useRecoilState(budgetState)
@@ -26,7 +27,7 @@ const Budget = () => {
   return (
     <div className="h-full">
       <div className="flex justify-between items-center">
-        <div><InPlaceEditor setValue={nameChangeHandler} value={budget.name} /> {budget.planned - budget.actual || 0}</div>
+        <div><InPlaceEditor setValue={nameChangeHandler} value={budget.name} /> {currency(budget.remaining)}</div>
         <BudgetDatePicker currentDate={budget.currentDate} setCurrentDate={currentDateHandler} />
       </div>
       <ActivityFilter active={budget.active} setActive={activityHandler} />

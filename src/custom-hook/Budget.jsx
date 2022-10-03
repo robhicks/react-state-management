@@ -4,6 +4,7 @@ import ActivityFilter from '../common/ActivityFilter'
 import MonthlyBudgets from './MonthlyBudgets'
 import useBudget from './useBudget'
 import InPlaceEditor from '../common/InPlaceEditor'
+import { currency } from '../utils'
 
 export default function Budget () {
   const { budget, setBudget } = useBudget()
@@ -15,7 +16,7 @@ export default function Budget () {
   return (
     <div className="h-full">
     <div className="flex justify-between items-center">
-      <div><InPlaceEditor setValue={nameChangeHandler} value={budget.name} /> {budget.planned - budget.actual || 0}</div>
+      <div><InPlaceEditor setValue={nameChangeHandler} value={budget.name} /> {currency(budget.remaining)}</div>
       <BudgetDatePicker currentDate={budget.currentDate} setCurrentDate={currentDateHandler} />
     </div>
     <ActivityFilter active={budget.active} setActive={activityHandler} />

@@ -4,6 +4,8 @@ import BudgetDatePicker from '../common/BudgetDatePicker'
 import ActivityFilter from '../common/ActivityFilter'
 import MonthlyBudgets from './MonthlyBudgets'
 import InPlaceEditor from '../common/InPlaceEditor'
+import { amountCalculator } from '../utils/budget-utils'
+import { currency } from '../utils'
 
 const model = getModel()
 
@@ -15,6 +17,12 @@ export default function Budget () {
     const month = d.getMonth()
     const year = d.getFullYear()
     const currentBudget = budget.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
+    if (currentBudget) {
+      amountCalculator(currentBudget)
+      budget.planned = currentBudget.planned
+      budget.actual = currentBudget.actual
+      budget.remaining = currentBudget.remaining
+    }
     setBudget({ ...budget, currentBudget })
   }, [budget.currentDate, budget.monthlyBudgets])
 
@@ -25,7 +33,7 @@ export default function Budget () {
   return (
     <div className="h-full">
       <div className="flex justify-between items-center">
-        <div><InPlaceEditor setValue={nameChangeHandler} value={budget.name} /> {budget.planned - budget.actual || 0}</div>
+        <div><InPlaceEditor setValue={nameChangeHandler} value={budget.name} /> {currency(budget.remaining)}</div>
         <BudgetDatePicker currentDate={budget.currentDate} setCurrentDate={currentDateHandler} />
       </div>
       <ActivityFilter active={budget.active} setActive={activityHandler} />
