@@ -1,5 +1,6 @@
 import { copy, getItemData, getCategoryData, getTransactionData, reducer as amountReducer, uuid } from '../utils'
 import getModel from '../utils/budget-model-generator'
+import { amountCalculator } from '../utils/budget-utils'
 
 export const model = getModel()
 
@@ -90,7 +91,17 @@ const reducer = (state, action) => {
       return { ...state, active: action.active }
     }
     case 'SET_CURRENT_BUDGET': {
-      return { ...state, currentBudget: action.currentBudget }
+      const currentBudget = action.currentBudget
+      let planned = 0
+      let actual = 0
+      let remaining = 0
+      if (currentBudget) {
+        amountCalculator(currentBudget)
+        planned = currentBudget.planned
+        actual = currentBudget.actual
+        remaining = currentBudget.remaining
+      }
+      return { ...state, currentBudget: action.currentBudget, actual, planned, remaining }
     }
     case 'SET_CURRENT_DATE': {
       return { ...state, currentDate: action.date }

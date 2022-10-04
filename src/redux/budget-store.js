@@ -2,6 +2,7 @@ import { createSlice, configureStore } from '@reduxjs/toolkit'
 import { copy, dateReviver, deserialize, getCategoryData, getItemData, getTransactionData, reducer, serialize, uuid } from '../utils'
 import add from 'date-fns/add'
 import getModel from '../utils/budget-model-generator'
+import { amountCalculator } from '../utils/budget-utils'
 
 const model = getModel()
 if (!model.active) model.active = 'planned'
@@ -115,7 +116,17 @@ const budgetSlice = createSlice({
       return ns
     },
     setCurrentMonthlyBudget (state, { payload }) {
-      return { ...state, currentMonthlyBudget: payload }
+      const currentBudget = copy(payload)
+      let planned = 0
+      let actual = 0
+      let remaining = 0
+      if (currentBudget) {
+        amountCalculator(currentBudget)
+        planned = currentBudget.planned
+        actual = currentBudget.actual
+        remaining = currentBudget.remaining
+      }
+      return { ...state, currentBudget, actual, planned, remaining }
     }
   }
 })

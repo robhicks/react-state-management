@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 import { copy, getCategoryData, getItemData, getTransactionData, reducer, uuid } from '../utils'
 import getModel from '../utils/budget-model-generator'
+import { amountCalculator } from '../utils/budget-utils'
 
 const model = getModel()
 
@@ -91,7 +92,9 @@ export class BudgetModel {
   }
 
   get currentMonthlyBudget () {
-    return this.monthlyBudgets.find((mb) => mb.month === this.currentMonth && mb.year === this.currentYear)
+    const monthlyBudget = this.monthlyBudgets.find((mb) => mb.month === this.currentMonth && mb.year === this.currentYear)
+    if (monthlyBudget) amountCalculator(monthlyBudget)
+    return monthlyBudget
   }
 
   get currentYear () {

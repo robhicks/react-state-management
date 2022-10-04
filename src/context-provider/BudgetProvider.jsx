@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { copy, reducer, uuid, getCategoryData, getItemData, getTransactionData } from '../utils'
 import getModel from '../utils/budget-model-generator'
+import { amountCalculator } from '../utils/budget-utils'
 
 export const model = getModel()
 
@@ -15,7 +16,15 @@ export const BudgetProvider = ({ children }) => {
     const month = d.getMonth()
     const year = d.getFullYear()
     const currentBudget = budget.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
-    setBudget({ ...budget, currentBudget })
+    if (currentBudget) {
+      amountCalculator(currentBudget)
+      budget.planned = currentBudget.planned
+      budget.actual = currentBudget.actual
+      budget.remaining = currentBudget.remaining
+      setBudget({ ...budget, currentBudget })
+    } else {
+      setBudget({ ...budget, currentBudget, remaining: 0 })
+    }
   }, [budget.currentDate, budget.monthlyBudgets])
 
   const addMonthlyBudget = (bud) => {
