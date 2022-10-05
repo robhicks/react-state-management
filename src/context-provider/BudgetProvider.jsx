@@ -1,8 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { copy, reducer, uuid, getCategoryData, getItemData, getTransactionData } from '../utils'
+import { copy, uuid, getCategoryData, getItemData, getTransactionData } from '../utils'
 import getModel from '../utils/budget-model-generator'
-import { amountCalculator } from '../utils/budget-utils'
 
 export const model = getModel()
 
@@ -16,15 +15,7 @@ export const BudgetProvider = ({ children }) => {
     const month = d.getMonth()
     const year = d.getFullYear()
     const currentBudget = budget.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
-    if (currentBudget) {
-      amountCalculator(currentBudget)
-      budget.planned = currentBudget.planned
-      budget.actual = currentBudget.actual
-      budget.remaining = currentBudget.remaining
-      setBudget({ ...budget, currentBudget })
-    } else {
-      setBudget({ ...budget, currentBudget, remaining: 0 })
-    }
+    setBudget({ ...budget, currentBudget })
   }, [budget.currentDate, budget.monthlyBudgets])
 
   const addMonthlyBudget = (bud) => {
@@ -83,11 +74,8 @@ export const BudgetProvider = ({ children }) => {
   const changeItemPlannedAmount = (itemId, amount) => {
     setBudget((cur) => {
       const bud = copy(cur)
-      const { category, item } = getItemData(bud, itemId)
+      const { item } = getItemData(bud, itemId)
       item.planned = Number(amount)
-      // update the category planned value
-      category.planned = category.items.reduce((p, c) => reducer(p, c, 'planned'))
-      category.remaining = category.planned - category.actual
       return bud
     })
   }
@@ -95,12 +83,8 @@ export const BudgetProvider = ({ children }) => {
   const changeTransactionAmount = (txId, amount) => {
     setBudget((cur) => {
       const bud = copy(cur)
-      const { category, item, transaction } = getTransactionData(bud, txId)
+      const { transaction } = getTransactionData(bud, txId)
       transaction.amount = Number(amount)
-      item.actual = item.transactions.reduce((p, c) => reducer(p, c, 'amount'), 0)
-      item.remaining = item.planned - item.actual
-      category.actual = category.items.reduce((p, c) => reducer(p, c, 'actual'), 0)
-      category.remaining = category.planned - category.actual
       return bud
     })
   }
@@ -126,12 +110,8 @@ export const BudgetProvider = ({ children }) => {
   const deleteTransaction = (txId) => {
     setBudget((cur) => {
       const bud = copy(cur)
-      const { category, item } = getTransactionData(budget, txId)
+      const { item } = getTransactionData(budget, txId)
       item.transactions = item.transactions.filter((t) => t.id !== txId)
-      item.actual = item.transactions.reduce((p, c) => reducer(p, c, 'amount'))
-      item.remaining = item.planned - item.actual
-      category.actual = category.items.reduce((p, c) => reducer(p, c, 'actual'))
-      category.remaining = category.planned - category.actual
       return bud
     })
   }

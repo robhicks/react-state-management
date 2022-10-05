@@ -4,17 +4,25 @@ import InPlaceEditor from '../common/InPlaceEditor'
 import Transaction from './Transaction'
 import { mdiPlus } from '@mdi/js'
 import { useBudget } from './BudgetProvider'
-import { currency } from '../utils'
+import { currency, reducer } from '../utils'
 
 export default function Item ({ item }) {
   const { addEmptyTransaction, budget, changeItemName, changeItemPlannedAmount } = useBudget()
   const [amount, setAmount] = useState(0)
+  const [actual, setActual] = useState(0)
+  const [remaining, setRemaining] = useState(0)
 
   useEffect(() => {
-    if (budget.active === 'actual') setAmount(item.actual)
+    const actual = item?.transactions?.reduce((p, c) => reducer(p, c, 'amount'), 0) || 0
+    setActual(actual)
+    setRemaining(item.planned - actual)
+  }, [item])
+
+  useEffect(() => {
+    if (budget.active === 'actual') setAmount(actual)
     if (budget.active === 'planned') setAmount(item.planned)
-    if (budget.active === 'remaining') setAmount(item.remaining)
-  }, [budget.active, item.actual, item.planned, item.remaining])
+    if (budget.active === 'remaining') setAmount(remaining)
+  }, [budget.active, actual, item.planned, remaining])
 
   const changeName = (value) => {
     changeItemName(item.id, value)
