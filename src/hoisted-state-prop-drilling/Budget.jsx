@@ -38,5 +38,6 @@ export default function Budget () {
       </div>
       <ActivityFilter active={budget.active} setActive={activityHandler} />
       <MonthlyBudgets budget={budget} setBudget={setBudget} />
-    </div>)
+    </div>
+  )
 }

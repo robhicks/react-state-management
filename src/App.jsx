@@ -1,7 +1,7 @@
-import React, { lazy, Profiler, Suspense } from 'react'
+import React, { lazy, Suspense } from 'react'
 import { BrowserRouter, Link, Routes, Route } from 'react-router-dom'
 import Home from './Home'
-import onRender from './onRender'
+// import onRender from './onRender'
 
 const HoistedPropDrilling = lazy(() => import('./hoisted-state-prop-drilling'))
 const ReactUseReducer = lazy(() => import('./reducer'))
@@ -13,7 +13,6 @@ const Recoil = lazy(() => import('./recoil'))
 
 function App () {
   return (
-    <Profiler id="app" onRender={onRender}>
       <BrowserRouter>
         <div className="navbar bg-primary">
           <Link className="btn btn-ghost normal-case text-xl text-white" to="/">Home</Link>
@@ -30,7 +29,6 @@ function App () {
           <Route path="07-recoil" element={<Suspense fallback={<div>Loading...</div>}><Recoil /></Suspense>} />
         </Routes>
       </BrowserRouter>
-    </Profiler>
   )
 }
 
