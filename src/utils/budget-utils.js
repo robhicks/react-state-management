@@ -1,4 +1,4 @@
-import { reducer } from './reducer'
+import { copy, reducer } from './index'
 
 const getCategoryByCategoryId = (monthlyBudget, categoryId) => monthlyBudget.categories.income.find((cat) => cat.id === categoryId) ||
   monthlyBudget.categories.expense.find((cat) => cat.id === categoryId)
@@ -70,25 +70,28 @@ export const getTransactionData = (budget, transactionId) => {
 }
 
 export const amountCalculator = (monthlyBudget) => {
-  monthlyBudget.categories.income.forEach((category) => {
+  if (!monthlyBudget) return monthlyBudget
+  const mb = copy(monthlyBudget)
+  mb.categories.income.forEach((category) => {
     category.items.forEach((item) => {
-      item.actual = item.transactions.reduce((p, c) => reducer(p, c, 'amount'), 0)
+      item.actual = item?.transactions?.reduce((p, c) => reducer(p, c, 'amount'), 0) || 0
       item.remaining = item.planned - item.actual
     })
-    category.planned = category.items.reduce((p, c) => reducer(p, c, 'planned'), 0)
-    category.actual = category.items.reduce((p, c) => reducer(p, c, 'actual'), 0)
+    category.planned = category?.items?.reduce((p, c) => reducer(p, c, 'planned'), 0) || 0
+    category.actual = category?.items?.reduce((p, c) => reducer(p, c, 'actual'), 0) || 0
     category.remaining = category.planned - category.actual
   })
-  monthlyBudget.categories.expense.forEach((category) => {
+  mb.categories.expense.forEach((category) => {
     category.items.forEach((item) => {
-      item.actual = item.transactions.reduce((p, c) => reducer(p, c, 'amount'), 0)
+      item.actual = item?.transactions?.reduce((p, c) => reducer(p, c, 'amount'), 0) || 0
       item.remaining = item.planned - item.actual
     })
-    category.planned = category.items.reduce((p, c) => reducer(p, c, 'planned'), 0)
-    category.actual = category.items.reduce((p, c) => reducer(p, c, 'actual'), 0)
+    category.planned = category?.items?.reduce((p, c) => reducer(p, c, 'planned'), 0) || 0
+    category.actual = category?.items?.reduce((p, c) => reducer(p, c, 'actual'), 0) || 0
     category.remaining = category.planned - category.actual
   })
-  monthlyBudget.planned = monthlyBudget.categories.income.reduce((p, c) => reducer(p, c, 'planned'), 0) - monthlyBudget.categories.expense.reduce((p, c) => reducer(p, c, 'planned'), 0)
-  monthlyBudget.actual = monthlyBudget.categories.income.reduce((p, c) => reducer(p, c, 'actual'), 0) - monthlyBudget.categories.expense.reduce((p, c) => reducer(p, c, 'actual'), 0)
-  monthlyBudget.remaining = monthlyBudget.planned - monthlyBudget.actual
+  mb.planned = mb.categories.income.reduce((p, c) => reducer(p, c, 'planned'), 0) - mb.categories.expense.reduce((p, c) => reducer(p, c, 'planned'), 0)
+  mb.actual = mb.categories.income.reduce((p, c) => reducer(p, c, 'actual'), 0) - mb.categories.expense.reduce((p, c) => reducer(p, c, 'actual'), 0)
+  mb.remaining = mb.planned - mb.actual
+  return mb
 }

@@ -42,3 +42,18 @@ export default () => {
 
   return budget
 }
+
+export const genMonthlyBudget = (month, year) => {
+  return {
+    id: uuid(),
+    month,
+    year,
+    planned: 0,
+    actual: 0,
+    remaining: 0,
+    categories: {
+      income: categoryGenerator('income', month, year),
+      expense: categoryGenerator('expense', month, year)
+    }
+  }
+}
