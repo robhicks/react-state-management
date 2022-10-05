@@ -1,7 +1,6 @@
 import { makeAutoObservable } from 'mobx'
-import { copy, getCategoryData, getItemData, getTransactionData, reducer, uuid } from '../utils'
-import getModel from '../utils/budget-model-generator'
-import { amountCalculator } from '../utils/budget-utils'
+import { getCategoryData, getItemData, getTransactionData, reducer, uuid } from '../utils'
+import getModel, { genMonthlyBudget } from '../utils/budget-model-generator'
 
 const model = getModel()
 
@@ -24,7 +23,7 @@ export class BudgetModel {
   addMonthlyBudget = () => {
     const month = this.currentDate.getMonth()
     const year = this.currentDate.getFullYear()
-    const mb = copy(model.monthlyBudgets[0])
+    const mb = genMonthlyBudget(month, year)
     mb.month = month
     mb.year = year
     this.monthlyBudgets.push(mb)
@@ -52,12 +51,8 @@ export class BudgetModel {
   }
 
   changeTransactionAmount = (txId, amount) => {
-    const { category, item, transaction } = getTransactionData(this, txId)
+    const { transaction } = getTransactionData(this, txId)
     transaction.amount = amount
-    item.actual = item.transactions.reduce((p, c) => reducer(p, c, 'amount'), 0)
-    item.remaining = item.planned - item.actual
-    category.actual = category.items.reduce((p, c) => reducer(p, c, 'actual'), 0)
-    category.remaining = category.planned - category.actual
   }
 
   changeTransactionDate = (txId, date) => {
@@ -71,12 +66,8 @@ export class BudgetModel {
   }
 
   deleteTransaction = (txId) => {
-    const { category, item } = getTransactionData(this, txId)
+    const { item } = getTransactionData(this, txId)
     item.transactions = item.transactions.filter((t) => t.id !== txId)
-    item.actual = item.transactions.reduce((p, c) => reducer(p, c, 'amount'), 0)
-    item.remaining = item.planned - item.actual
-    category.actual = category.items.reduce((p, c) => reducer(p, c, 'actual'), 0)
-    category.remaining = category.planned - category.actual
   }
 
   setActive = (filter) => {
@@ -93,7 +84,6 @@ export class BudgetModel {
 
   get currentMonthlyBudget () {
     const monthlyBudget = this.monthlyBudgets.find((mb) => mb.month === this.currentMonth && mb.year === this.currentYear)
-    if (monthlyBudget) amountCalculator(monthlyBudget)
     return monthlyBudget
   }
 

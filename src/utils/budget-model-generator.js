@@ -30,9 +30,6 @@ export default () => {
       id: uuid(),
       month: mb.month,
       year: mb.year,
-      planned: 0,
-      actual: 0,
-      remaining: 0,
       categories: {
         income: categoryGenerator('income', mb.month, mb.year),
         expense: categoryGenerator('expense', mb.month, mb.year)
@@ -48,9 +45,6 @@ export const genMonthlyBudget = (month, year) => {
     id: uuid(),
     month,
     year,
-    planned: 0,
-    actual: 0,
-    remaining: 0,
     categories: {
       income: categoryGenerator('income', month, year),
       expense: categoryGenerator('expense', month, year)

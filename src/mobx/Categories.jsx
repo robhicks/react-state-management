@@ -5,6 +5,7 @@ import Accordion from '../common/Accordion'
 import { reducer } from '../utils/'
 import { observer } from 'mobx-react-lite'
 import store from './BudgetModel'
+import { amountCalculator } from '../utils/budget-utils'
 
 const Categories = observer(() => {
   const [budget] = useState(store)
@@ -12,8 +13,10 @@ const Categories = observer(() => {
   const [expenseAmount, setExpenseAmount] = useState(0)
 
   useEffect(() => {
-    setIncomeAmount(budget.currentMonthlyBudget.categories.income.reduce((p, c) => reducer(p, c, budget.active), 0))
-    setExpenseAmount(budget.currentMonthlyBudget.categories.expense.reduce((p, c) => reducer(p, c, budget.active), 0))
+    const mb = amountCalculator(budget.currentMonthlyBudget)
+    setIncomeAmount(mb.categories.income.reduce((p, c) => reducer(p, c, budget.active), 0))
+
+    setExpenseAmount(mb.categories.expense.reduce((p, c) => reducer(p, c, budget.active), 0))
   }, [budget.active, budget.currentMonthlyBudget])
 
   return (

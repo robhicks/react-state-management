@@ -5,6 +5,7 @@ import MonthlyBudgets from './MonthlyBudgets'
 import { observer } from 'mobx-react-lite'
 import store from './BudgetModel'
 import InPlaceEditor from '../common/InPlaceEditor'
+import { amountCalculator } from '../utils/budget-utils'
 import { currency } from '../utils'
 
 const Budget = observer(() => {
@@ -15,8 +16,9 @@ const Budget = observer(() => {
   useEffect(() => {
     const month = budget?.currentDate.getMonth()
     const year = budget?.currentDate.getFullYear()
-    const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
+    let monthlyBudget = budget.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
     if (monthlyBudget) {
+      monthlyBudget = amountCalculator(monthlyBudget)
       const planned = monthlyBudget.planned
       const actual = monthlyBudget.actual
       const remains = planned - actual
@@ -24,11 +26,9 @@ const Budget = observer(() => {
     } else {
       setRemaining(0)
     }
-  }, [budget?.currentDate])
+  }, [budget])
 
   const nameChangeHandler = (val) => budget.changeBudgetName(val)
-
-  console.log('budget', budget)
 
   return (
     <div className="h-full">

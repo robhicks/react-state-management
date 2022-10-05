@@ -4,6 +4,7 @@ import Category from './Category'
 import Accordion from '../common/Accordion'
 import { reducer } from '../utils/'
 import { useBudget } from './BudgetProvider'
+import { amountCalculator } from '../utils/budget-utils'
 
 export default function Categories () {
   const { budget } = useBudget()
@@ -11,9 +12,10 @@ export default function Categories () {
   const [expenseAmount, setExpenseAmount] = useState(0)
 
   useEffect(() => {
-    setIncomeAmount(budget.currentBudget.categories.income.reduce((p, c) => reducer(p, c, budget.active), 0))
+    const mb = amountCalculator(budget.currentBudget)
+    setIncomeAmount(mb.categories.income.reduce((p, c) => reducer(p, c, budget.active), 0))
 
-    setExpenseAmount(budget.currentBudget.categories.expense.reduce((p, c) => reducer(p, c, budget.active), 0))
+    setExpenseAmount(mb.categories.expense.reduce((p, c) => reducer(p, c, budget.active), 0))
   }, [budget.active, budget.currentBudget])
 
   return (
