@@ -26,7 +26,6 @@ export default function Budget () {
     } else {
       setRemaining(0)
     }
-    // console.log('currentBudget', currentBudget)
     setBudget({ ...budget, currentBudget })
   }, [budget.currentDate, budget.monthlyBudgets])
 

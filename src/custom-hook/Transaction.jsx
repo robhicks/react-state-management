@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react'
 import { mdiDelete } from '@mdi/js'
-import { copy, getTransactionData, reducer } from '../utils'
+import { copy, getTransactionData } from '../utils'
 
 export default function Transaction ({ budget, setBudget, transaction }) {
   const [maxDate, setMaxDate] = useState()
@@ -19,12 +19,8 @@ export default function Transaction ({ budget, setBudget, transaction }) {
 
   const delTx = () => {
     const bud = copy(budget)
-    const { category, item } = getTransactionData(bud, transaction.id)
+    const { item } = getTransactionData(bud, transaction.id)
     item.transactions = item.transactions.filter((t) => t.id !== transaction.id)
-    item.actual = item.transactions.reduce((p, c) => reducer(p, c, 'amount'), 0)
-    item.remaining = item.planned - item.actual
-    category.actual = category.items.reduce((p, c) => reducer(p, c, 'actual'), 0)
-    category.remaining = category.planned - category.actual
     setBudget({ ...budget, ...bud })
   }
 
@@ -42,14 +38,12 @@ export default function Transaction ({ budget, setBudget, transaction }) {
   }
   const amountChangeHandler = (ev) => {
     const bud = copy(budget)
-    const { category, item, transaction: tx } = getTransactionData(bud, transaction.id)
+    const { transaction: tx } = getTransactionData(bud, transaction.id)
     tx.amount = Number(ev.target.value)
-    item.actual = item.transactions.reduce((p, c) => reducer(p, c, 'amount'), 0)
-    item.remaining = item.planned - item.actual
-    category.actual = category.items.reduce((p, c) => reducer(p, c, 'actual'), 0)
-    category.remaining = category.planned - category.actual
-    setBudget({ ...budget, ...bud })
+    setBudget((cur) => ({ ...cur, ...bud }))
   }
+
+  // console.log('transaction', transaction)
 
   return (
     <div className="grid grid-cols-4 gap-2 mb-1">

@@ -3,16 +3,32 @@ import React, { useEffect, useState } from 'react'
 import Accordion from '../common/Accordion'
 import Item from './Item'
 import InPlaceEditor from '../common/InPlaceEditor'
-import { copy, getCategoryData } from '../utils'
+import { copy, getCategoryData, reducer } from '../utils'
 
 export default function Category ({ budget, category, setBudget }) {
   const [amount, setAmount] = useState(0)
+  const [planned, setPlanned] = useState(0)
+  const [actual, setActual] = useState(0)
+  const [remaining, setRemaining] = useState(0)
 
   useEffect(() => {
-    if (budget.active === 'actual') setAmount(category.actual)
-    if (budget.active === 'planned') setAmount(category.planned)
-    if (budget.active === 'remaining') setAmount(category.remaining)
-  }, [budget.active, category.actual, category.planned, category.remaining])
+    const cat = copy(category)
+    cat.items.forEach((item) => {
+      item.actual = item?.transactions?.reduce((p, c) => reducer(p, c, 'amount'), 0) || 0
+      item.remaining = item.planned - item.actual
+    })
+    const planned = cat?.items?.reduce((p, c) => reducer(p, c, 'planned'), 0) || 0
+    const actual = cat?.items?.reduce((p, c) => reducer(p, c, 'actual'), 0) || 0
+    setPlanned(planned)
+    setActual(actual)
+    setRemaining(planned - actual)
+  }, [category])
+
+  useEffect(() => {
+    if (budget.active === 'actual') setAmount(actual)
+    if (budget.active === 'planned') setAmount(planned)
+    if (budget.active === 'remaining') setAmount(remaining)
+  }, [budget.active, actual, planned, remaining])
 
   const updateName = (val) => {
     setBudget((cur) => {
@@ -28,7 +44,7 @@ export default function Category ({ budget, category, setBudget }) {
       <div className="pt-2">
         {category.items.map((item) =>
           <Item budget={budget} setBudget={setBudget} key={item.id} item={item} />
-        ) }
+        )}
       </div>
     </Accordion>
   )
