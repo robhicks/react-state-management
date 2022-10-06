@@ -5,7 +5,6 @@ import MonthlyBudgets from './MonthlyBudgets'
 import { observer } from 'mobx-react-lite'
 import store from './BudgetModel'
 import InPlaceEditor from '../common/InPlaceEditor'
-import { amountCalculator } from '../utils/budget-utils'
 import { currency } from '../utils'
 
 const Budget = observer(() => {
@@ -14,11 +13,9 @@ const Budget = observer(() => {
   const [remaining, setRemaining] = useState(0)
 
   useEffect(() => {
-    const month = budget?.currentDate.getMonth()
-    const year = budget?.currentDate.getFullYear()
-    let monthlyBudget = budget.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
+    const monthlyBudget = budget.currentMonthlyBudget
+
     if (monthlyBudget) {
-      monthlyBudget = amountCalculator(monthlyBudget)
       const planned = monthlyBudget.planned
       const actual = monthlyBudget.actual
       const remains = planned - actual
@@ -26,17 +23,17 @@ const Budget = observer(() => {
     } else {
       setRemaining(0)
     }
-  }, [budget])
+  }, [budget.monthlyBudgets, budget.currentMonthlyBudget, budget.currentDate])
 
-  const nameChangeHandler = (val) => budget.changeBudgetName(val)
+  const nameChangeHandler = (val) => (budget.name = val)
 
   return (
     <div className="h-full">
       <div className="flex justify-between items-center">
         <div><InPlaceEditor setValue={nameChangeHandler} value={budget.name} /> {currency(remaining)}</div>
-        <BudgetDatePicker currentDate={budget.currentDate} setCurrentDate={budget.setCurrentDate} />
+        <BudgetDatePicker currentDate={budget.currentDate} setCurrentDate={(date) => (budget.currentDate = date)} />
       </div>
-      <ActivityFilter active={budget.active} setActive={budget.setActive} />
+      <ActivityFilter active={budget.active} setActive={(activity) => (budget.active = activity)} />
       <MonthlyBudgets />
     </div>
   )

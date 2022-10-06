@@ -18,7 +18,7 @@ const Item = observer(({ item }) => {
     const actual = item?.transactions?.reduce((p, c) => reducer(p, c, 'amount'), 0) || 0
     setActual(actual)
     setRemaining(planned - actual)
-  }, [item])
+  }, [budget.monthlyBudgets])
 
   useEffect(() => {
     if (budget.active === 'actual') setAmount(actual)

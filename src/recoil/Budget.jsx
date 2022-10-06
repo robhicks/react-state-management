@@ -6,7 +6,7 @@ import budgetState from './budgetState'
 import MonthlyBudgets from './MonthlyBudgets'
 import InPlaceEditor from '../common/InPlaceEditor'
 import { amountCalculator } from '../utils/budget-utils'
-import { copy, currency } from '../utils'
+import { currency } from '../utils'
 
 const Budget = () => {
   const [budget, setBudget] = useRecoilState(budgetState)
@@ -17,9 +17,9 @@ const Budget = () => {
     const month = d.getMonth()
     const year = d.getFullYear()
     const currentBudget = budget.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
+
     if (currentBudget) {
-      const mb = copy(currentBudget)
-      amountCalculator(mb)
+      const mb = amountCalculator(currentBudget)
       const planned = mb.planned
       const actual = mb.actual
       const remaining = planned - actual
@@ -27,7 +27,6 @@ const Budget = () => {
     } else {
       setRemaining(0)
     }
-    setBudget({ ...budget, currentBudget })
   }, [budget.currentDate, budget.monthlyBudgets])
 
   const activityHandler = (val) => setBudget({ ...budget, active: val })

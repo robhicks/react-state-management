@@ -7,7 +7,7 @@ import store from './BudgetModel'
 const MonthlyBudgets = observer(() => {
   const [budget] = useState(store)
 
-  if (budget.currentMonthlyBudget?.id) {
+  if (budget.currentMonthlyBudget) {
     return <div className="h-full"><MonthlyBudget /></div>
   }
 

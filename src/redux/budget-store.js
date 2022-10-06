@@ -1,8 +1,7 @@
 import { createSlice, configureStore } from '@reduxjs/toolkit'
-import { copy, dateReviver, deserialize, getCategoryData, getItemData, getTransactionData, reducer, serialize, uuid } from '../utils'
+import { copy, dateReviver, deserialize, getCategoryData, getItemData, getTransactionData, serialize, uuid } from '../utils'
 import add from 'date-fns/add'
-import getModel from '../utils/budget-model-generator'
-import { amountCalculator } from '../utils/budget-utils'
+import getModel, { genMonthlyBudget } from '../utils/budget-model-generator'
 
 const model = getModel()
 if (!model.active) model.active = 'planned'
@@ -32,11 +31,12 @@ const budgetSlice = createSlice({
       const date = deserialize(state.currentDate, dateReviver)
       const month = date.getMonth()
       const year = date.getFullYear()
-      const mb = copy(model.monthlyBudgets[0])
+      const mb = genMonthlyBudget(month, year)
       mb.month = month
       mb.year = year
-      bud.monthlyBudgets.push(mb)
-      const ns = { ...state, ...bud, currentDate: currentDate(state.currentDate) }
+      const idx = bud.monthlyBudgets.push(mb)
+      const currentMonthlyBudget = bud.monthlyBudgets[idx - 1]
+      const ns = { ...state, ...bud, currentDate: currentDate(state.currentDate), currentMonthlyBudget }
       return ns
     },
     changeBudgetName (state, { payload }) {
@@ -59,21 +59,15 @@ const budgetSlice = createSlice({
     },
     changeItemPlannedAmount (state, { payload: { itemId, amount } }) {
       const bud = copy(state)
-      const { category, item } = getItemData(bud, itemId)
+      const { item } = getItemData(bud, itemId)
       item.planned = Number(amount)
-      category.planned = category.items.reduce((p, c) => reducer(p, c, 'planned'))
-      category.remaining = category.planned - category.actual
       const ns = { ...state, ...bud, currentDate: currentDate(state.currentDate) }
       return ns
     },
     changeTransactionAmount (state, { payload: { txId, amount } }) {
       const bud = copy(state)
-      const { category, item, transaction } = getTransactionData(bud, txId)
+      const { transaction } = getTransactionData(bud, txId)
       transaction.amount = amount
-      item.actual = item.transactions.reduce((p, c) => reducer(p, c, 'amount'), 0)
-      item.remaining = item.planned - item.actual
-      category.actual = category.items.reduce((p, c) => reducer(p, c, 'actual'), 0)
-      category.remaining = category.planned - category.actual
       const ns = { ...state, ...bud, currentDate: currentDate(state.currentDate) }
       return ns
     },
@@ -94,12 +88,8 @@ const budgetSlice = createSlice({
     },
     deleteTransaction (state, { payload: { txId } }) {
       const bud = copy(state)
-      const { category, item } = getTransactionData(bud, txId)
+      const { item } = getTransactionData(bud, txId)
       item.transactions = item.transactions.filter((t) => t.id !== txId)
-      item.actual = item.transactions.reduce((p, c) => reducer(p, c, 'amount'), 0)
-      item.remaining = item.planned - item.actual
-      category.actual = category.items.reduce((p, c) => reducer(p, c, 'actual'), 0)
-      category.remaining = category.planned - category.actual
       const ns = { ...state, ...bud, currentDate: currentDate(state.currentDate) }
       return ns
     },
@@ -114,19 +104,6 @@ const budgetSlice = createSlice({
     setCurrentDate (state, { payload }) {
       const ns = { ...state, currentDate: payload }
       return ns
-    },
-    setCurrentMonthlyBudget (state, { payload }) {
-      const currentBudget = copy(payload)
-      let planned = 0
-      let actual = 0
-      let remaining = 0
-      if (currentBudget) {
-        amountCalculator(currentBudget)
-        planned = currentBudget.planned
-        actual = currentBudget.actual
-        remaining = currentBudget.remaining
-      }
-      return { ...state, currentBudget, actual, planned, remaining }
     }
   }
 })

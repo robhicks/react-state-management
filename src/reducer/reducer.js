@@ -1,8 +1,5 @@
 import { copy, getItemData, getCategoryData, getTransactionData, reducer as amountReducer, uuid } from '../utils'
-import getModel from '../utils/budget-model-generator'
-import { amountCalculator } from '../utils/budget-utils'
-
-export const model = getModel()
+import { genMonthlyBudget } from '../utils/budget-model-generator'
 
 const reducer = (state, action) => {
   // console.log('action', action)
@@ -19,7 +16,7 @@ const reducer = (state, action) => {
       const bud = copy(state)
       const month = state.currentDate.getMonth()
       const year = state.currentDate.getFullYear()
-      const mb = copy(model.monthlyBudgets[0])
+      const mb = genMonthlyBudget(month, year)
       mb.month = month
       mb.year = year
       bud.monthlyBudgets.push(mb)
@@ -76,32 +73,12 @@ const reducer = (state, action) => {
     }
     case 'CHANGE_TRANSACTION_AMOUNT': {
       const budget = copy(state)
-      const { category, item, transaction } = getTransactionData(budget, action.transactionId)
-      transaction.amount = action.amount
-
-      item.actual = item.transactions.reduce((p, c) => amountReducer(p, c, 'amount'), 0)
-      category.actual = category.items.reduce((p, c) => amountReducer(p, c, 'actual'), 0)
-      item.remaining = item.planned - item.actual
-      category.remaining = category.planned - category.actual
-
-      const newState = { ...state, ...budget }
-      return newState
+      const { transaction } = getTransactionData(budget, action.transactionId)
+      transaction.amount = Number(action.amount)
+      return { ...state, ...budget }
     }
     case 'SET_ACTIVITY': {
       return { ...state, active: action.active }
-    }
-    case 'SET_CURRENT_BUDGET': {
-      const currentBudget = action.currentBudget
-      let planned = 0
-      let actual = 0
-      let remaining = 0
-      if (currentBudget) {
-        amountCalculator(currentBudget)
-        planned = currentBudget.planned
-        actual = currentBudget.actual
-        remaining = currentBudget.remaining
-      }
-      return { ...state, currentBudget: action.currentBudget, actual, planned, remaining }
     }
     case 'SET_CURRENT_DATE': {
       return { ...state, currentDate: action.date }

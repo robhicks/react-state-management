@@ -6,7 +6,7 @@ model.currentDate = new Date()
 
 const budgetState = atom({
   key: 'budgetState',
-  default: model,
+  default: model
 })
 
 export default budgetState

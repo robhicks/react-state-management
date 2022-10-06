@@ -5,17 +5,34 @@ import Item from './Item'
 import InPlaceEditor from '../common/InPlaceEditor'
 import { useDispatch, useSelector } from 'react-redux'
 import { changeCategoryName, selectBudget } from './budget-store'
+import { copy, reducer } from '../utils'
 
 const Category = ({ category }) => {
   const budget = useSelector(selectBudget)
   const dispatch = useDispatch()
   const [amount, setAmount] = useState(0)
+  const [planned, setPlanned] = useState(0)
+  const [actual, setActual] = useState(0)
+  const [remaining, setRemaining] = useState(0)
 
   useEffect(() => {
-    if (budget.active === 'actual') setAmount(category.actual)
-    if (budget.active === 'planned') setAmount(category.planned)
-    if (budget.active === 'remaining') setAmount(category.remaining)
-  }, [budget.active, category.actual, category.planned])
+    const cat = copy(category)
+    cat.items.forEach((item) => {
+      item.actual = item?.transactions?.reduce((p, c) => reducer(p, c, 'amount'), 0) || 0
+      item.remaining = item.planned - item.actual
+    })
+    const planned = cat?.items?.reduce((p, c) => reducer(p, c, 'planned'), 0) || 0
+    const actual = cat?.items?.reduce((p, c) => reducer(p, c, 'actual'), 0) || 0
+    setPlanned(planned)
+    setActual(actual)
+    setRemaining(planned - actual)
+  }, [category])
+
+  useEffect(() => {
+    if (budget.active === 'actual') setAmount(actual)
+    if (budget.active === 'planned') setAmount(planned)
+    if (budget.active === 'remaining') setAmount(remaining)
+  }, [budget.active, actual, planned, remaining])
 
   const updateName = (val) => {
     dispatch(changeCategoryName({ categoryId: category.id, name: val }))

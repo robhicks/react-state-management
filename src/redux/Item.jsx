@@ -5,19 +5,33 @@ import Transaction from './Transaction'
 import { mdiPlus } from '@mdi/js'
 import { useSelector, useDispatch } from 'react-redux'
 import { addEmptyTransaction, changeItemName, changeItemPlannedAmount, selectBudget } from './budget-store'
-import { currency } from '../utils'
+import { currency, reducer } from '../utils'
 
 const Item = ({ item }) => {
   const budget = useSelector(selectBudget)
   const dispatch = useDispatch()
   const [amount, setAmount] = useState(0)
   const [planned, setPlanned] = useState(item.planned)
+  const [actual, setActual] = useState(0)
+  const [remaining, setRemaining] = useState(0)
 
   useEffect(() => {
-    if (budget.active === 'actual') setAmount(item.actual)
-    if (budget.active === 'planned') setAmount(item.planned)
-    if (budget.active === 'remaining') setAmount(item.remaining)
-  }, [budget.active, item.planned, item.actual])
+    const actual = item?.transactions?.reduce((p, c) => reducer(p, c, 'amount'), 0) || 0
+    setActual(actual)
+    setRemaining(planned - actual)
+  }, [item])
+
+  useEffect(() => {
+    if (budget.active === 'actual') setAmount(actual)
+    if (budget.active === 'planned') setAmount(planned)
+    if (budget.active === 'remaining') setAmount(remaining)
+  }, [budget.active, actual, planned, remaining])
+
+  useEffect(() => {
+    if (budget.active === 'actual') setAmount(actual)
+    if (budget.active === 'planned') setAmount(planned)
+    if (budget.active === 'remaining') setAmount(remaining)
+  }, [budget.active, planned, actual])
 
   const changeName = (value) => {
     dispatch(changeItemName({ itemId: item.id, name: value }))

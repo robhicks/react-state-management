@@ -16,6 +16,7 @@ export default function Budget () {
     const month = d.getMonth()
     const year = d.getFullYear()
     let currentBudget = budget.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
+
     if (currentBudget) {
       currentBudget = amountCalculator(currentBudget)
       const planned = currentBudget.planned
@@ -24,7 +25,6 @@ export default function Budget () {
     } else {
       setRemaining(0)
     }
-    setBudget({ ...budget, currentBudget })
   }, [budget.currentDate, budget.monthlyBudgets])
 
   const activityHandler = (val) => setBudget({ ...budget, active: val })

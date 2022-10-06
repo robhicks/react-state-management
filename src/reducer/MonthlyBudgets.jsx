@@ -1,12 +1,22 @@
 /* eslint-disable react/prop-types */
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import MonthlyBudget from './MonthlyBudget'
 
 export default function MonthlyBudgets ({ budget, dispatch }) {
+  const [monthlyBudget, setMonthlyBudget] = useState(false)
+
+  useEffect(() => {
+    const d = budget.currentDate ? new Date(budget.currentDate) : new Date()
+    const month = d.getMonth()
+    const year = d.getFullYear()
+    const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
+    setMonthlyBudget(Boolean(monthlyBudget))
+  }, [budget.currentDate, budget.monthlyBudgets])
+
   const createMonthlyBudget = () => {
     dispatch({ type: 'ADD_MONTHLY_BUDGET' })
   }
-  if (budget.currentBudget) {
+  if (monthlyBudget) {
     return <div className="h-full"><MonthlyBudget budget={budget} dispatch={dispatch} /></div>
   }
 

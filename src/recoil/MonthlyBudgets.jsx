@@ -1,24 +1,33 @@
 /* eslint-disable react/prop-types */
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import MonthlyBudget from './MonthlyBudget'
 import { useRecoilState } from 'recoil'
-import budgetState, { model } from './budgetState'
+import budgetState from './budgetState'
 import { copy } from '../utils'
+import { genMonthlyBudget } from '../utils/budget-model-generator'
 
 const MonthlyBudgets = () => {
   const [budget, setBudget] = useRecoilState(budgetState)
+  const [monthlyBudget, setMonthlyBudget] = useState(false)
+
+  useEffect(() => {
+    const d = budget.currentDate ? new Date(budget.currentDate) : new Date()
+    const month = d.getMonth()
+    const year = d.getFullYear()
+    const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
+    setMonthlyBudget(Boolean(monthlyBudget))
+  }, [budget.currentDate, budget.monthlyBudgets])
+
   const createMonthlyBudget = () => {
     const bud = copy(budget)
     const month = budget.currentDate.getMonth()
     const year = budget.currentDate.getFullYear()
-    const mb = copy(model.monthlyBudgets[0])
-    mb.month = month
-    mb.year = year
+    const mb = genMonthlyBudget(month, year)
     bud.monthlyBudgets.push(mb)
     setBudget(bud)
   }
 
-  if (budget.currentBudget?.id) {
+  if (monthlyBudget) {
     return <div className="h-full"><MonthlyBudget /></div>
   }
 

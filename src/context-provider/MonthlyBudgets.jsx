@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import MonthlyBudget from './MonthlyBudget'
 import { useBudget } from './BudgetProvider'
 import { copy } from '../utils'
@@ -7,6 +7,15 @@ import { genMonthlyBudget } from '../utils/budget-model-generator'
 
 export default function MonthlyBudgets () {
   const { budget, addMonthlyBudget } = useBudget()
+  const [monthlyBudget, setMonthlyBudget] = useState(false)
+
+  useEffect(() => {
+    const d = budget.currentDate ? new Date(budget.currentDate) : new Date()
+    const month = d.getMonth()
+    const year = d.getFullYear()
+    const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
+    setMonthlyBudget(Boolean(monthlyBudget))
+  }, [budget.currentDate, budget.monthlyBudgets])
 
   const createMonthlyBudget = () => {
     const bud = copy(budget)
@@ -19,7 +28,7 @@ export default function MonthlyBudgets () {
     addMonthlyBudget(bud)
   }
 
-  if (budget.currentBudget) {
+  if (monthlyBudget) {
     return <MonthlyBudget />
   }
 

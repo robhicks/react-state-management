@@ -1,25 +1,25 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import MonthlyBudget from './MonthlyBudget'
 import { useDispatch, useSelector } from 'react-redux'
-import { addMonthlyBudget, selectBudget, setCurrentMonthlyBudget } from './budget-store'
-import { deserialize, dateReviver } from '../utils'
+import { addMonthlyBudget, selectBudget } from './budget-store'
 
 const MonthlyBudgets = () => {
   const budget = useSelector(selectBudget)
   const dispatch = useDispatch()
+  const [monthlyBudget, setMonthlyBudget] = useState(false)
 
   const createMonthlyBudget = () => dispatch(addMonthlyBudget())
 
   useEffect(() => {
-    const currentDate = deserialize(budget.currentDate, dateReviver)
-    const month = currentDate.getMonth()
-    const year = currentDate.getFullYear()
-    const bud = budget.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
-    dispatch(setCurrentMonthlyBudget(bud))
-  }, [budget.currentDate])
+    const d = budget.currentDate ? new Date(budget.currentDate) : new Date()
+    const month = d.getMonth()
+    const year = d.getFullYear()
+    const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
+    setMonthlyBudget(Boolean(monthlyBudget))
+  }, [budget.currentDate, budget.monthlyBudgets])
 
-  if (budget.currentMonthlyBudget?.id) {
+  if (monthlyBudget) {
     return <div className="h-full"><MonthlyBudget /></div>
   }
 
