@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import MonthlyBudget from './MonthlyBudget'
 import { useDispatch, useSelector } from 'react-redux'
 import { addMonthlyBudget, selectBudget } from './budget-store'
+import { deserialize } from '../utils'
 
 const MonthlyBudgets = () => {
   const budget = useSelector(selectBudget)
@@ -12,11 +13,11 @@ const MonthlyBudgets = () => {
   const createMonthlyBudget = () => dispatch(addMonthlyBudget())
 
   useEffect(() => {
-    const d = budget.currentDate ? new Date(budget.currentDate) : new Date()
+    const d = budget.currentDate ? new Date(deserialize(budget.currentDate)) : new Date()
     const month = d.getMonth()
     const year = d.getFullYear()
-    const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
-    setMonthlyBudget(Boolean(monthlyBudget))
+    const mb = budget.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
+    setMonthlyBudget(Boolean(mb))
   }, [budget.currentDate, budget.monthlyBudgets])
 
   if (monthlyBudget) {

@@ -4,7 +4,7 @@ import Category from './Category'
 import Accordion from '../common/Accordion'
 import { useSelector } from 'react-redux'
 import { selectBudget } from './budget-store'
-import { reducer } from '../utils/'
+import { reducer, deserialize } from '../utils/'
 import { amountCalculator } from '../utils/budget-utils'
 
 const Categories = () => {
@@ -14,7 +14,8 @@ const Categories = () => {
   const [currentMonthlyBudget, setCurrentMonthlyBudget] = useState()
 
   useEffect(() => {
-    const d = budget.currentDate ? new Date(budget.currentDate) : new Date()
+    const d = budget.currentDate ? new Date(deserialize(budget.currentDate)) : new Date()
+    console.log('d', d)
     const month = d.getMonth()
     const year = d.getFullYear()
     const monthlyBudget = budget.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
@@ -31,13 +32,13 @@ const Categories = () => {
     <div className="">
       <Accordion amount={incomeAmount} border title="Income">
         <div className="h-1 mt-1 border-t border-gray-300"></div>
-        {budget.currentMonthlyBudget.categories.income.map((cat) =>
+        {currentMonthlyBudget.categories.income.map((cat) =>
           <Category key={cat.id} category={cat} />
         )}
       </Accordion>
       <Accordion amount={expenseAmount} border title="Expense">
         <div className="h-1 mt-1 border-t border-gray-300"></div>
-        {budget.currentMonthlyBudget.categories.expense.map((cat) =>
+        {currentMonthlyBudget.categories.expense.map((cat) =>
           <Category key={cat.id} category={cat} />
         )}
       </Accordion>
