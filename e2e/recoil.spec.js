@@ -24,6 +24,7 @@ test('test', async ({ page }) => {
   await page.locator('input[type="number"]').first().click()
   await page.locator('input[type="number"]').first().click()
   await page.locator('input[type="number"]').first().click()
+  await page.locator('text=Actual').click()
   await page.locator(':nth-match([placeholder="Amount"], 1)').click()
 
   const perfEntries = await page.evaluate(() => performance.getEntries())
