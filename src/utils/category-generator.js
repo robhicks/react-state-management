@@ -1,5 +1,6 @@
 import { uuid } from './index'
 import add from 'date-fns/add'
+import { faker } from '@faker-js/faker'
 
 export default (type, month, year) => {
   let categories = []
@@ -16,19 +17,18 @@ export default (type, month, year) => {
         {
           name: 'Paycheck #1',
           id: uuid(),
-          planned: 2500,
+          planned: faker.finance.amount(1000, 3000),
           transactions: [
-            { id: uuid(), amount: 2500, source: 'Work', date: add(d, { days: 4 }).toISOString().substring(0, 10) }
+            { id: uuid(), amount: faker.finance.amount(1000, 3000), source: 'Work', date: add(d, { days: 4 }).toISOString().substring(0, 10) }
           ]
         },
         {
           name: 'Paycheck #2',
           id: uuid(),
-          planned: 2500,
-          actual: 2500,
+          planned: faker.finance.amount(1000, 3000),
           remaining: 0,
           transactions: [
-            { id: uuid(), amount: 2500, source: 'Work', date: add(d, { days: 20 }).toISOString().substring(0, 10) }
+            { id: uuid(), amount: faker.finance.amount(1000, 3000), source: 'Work', date: add(d, { days: 20 }).toISOString().substring(0, 10) }
           ]
         }
       ]
@@ -44,17 +44,17 @@ export default (type, month, year) => {
           {
             id: uuid(),
             name: 'Mortgage Payments',
-            planned: 1000,
+            planned: faker.finance.amount(1000, 1500),
             transactions: [
-              { id: uuid(), amount: 1000, source: 'Mortgage Company', date: d.toISOString().substring(0, 10) }
+              { id: uuid(), amount: faker.finance.amount(1000, 1500), source: 'Mortgage Company', date: d.toISOString().substring(0, 10) }
             ]
           },
           {
             id: uuid(),
             name: 'Maintenance',
-            planned: 100,
+            planned: faker.finance.amount(50, 150),
             transactions: [
-              { id: uuid(), amount: 1000, source: 'Mortgage Company', date: add(d, { days: 15 }).toISOString().substring(0, 10) }
+              { id: uuid(), amount: faker.finance.amount(25, 300), source: 'Everything Electric', date: add(d, { days: 15 }).toISOString().substring(0, 10) }
             ]
           }
         ]
@@ -68,9 +68,9 @@ export default (type, month, year) => {
           {
             id: uuid(),
             name: 'Car Purchase',
-            planned: 250,
+            planned: faker.finance.amount(100, 500),
             transactions: [
-              { id: uuid(), amount: 250, source: 'Car Finance Company', date: d.toISOString().substring(0, 10) }
+              { id: uuid(), amount: faker.finance.amount(100, 500), source: 'Car Finance Company', date: d.toISOString().substring(0, 10) }
             ]
           },
           {
@@ -78,16 +78,16 @@ export default (type, month, year) => {
             name: 'Fuel',
             planned: 150,
             transactions: [
-              { id: uuid(), amount: 75, source: 'Maverick', date: d.toISOString().substring(0, 10) },
-              { id: uuid(), amount: 89, source: 'Chevron', date: add(d, { days: 15 }).toISOString().substring(0, 10) }
+              { id: uuid(), amount: faker.finance.amount(50, 80), source: 'Maverick', date: d.toISOString().substring(0, 10) },
+              { id: uuid(), amount: faker.finance.amount(50, 80), source: 'Chevron', date: add(d, { days: 15 }).toISOString().substring(0, 10) }
             ]
           },
           {
             id: uuid(),
             name: 'Maintenance',
-            planned: 50,
+            planned: faker.finance.amount(0, 500),
             transactions: [
-              { id: uuid(), amount: 86.25, source: 'Havoline Express', date: add(d, { days: 24 }).toISOString().substring(0, 10) }
+              { id: uuid(), amount: faker.finance.amount(0, 500), source: 'Havoline Express', date: add(d, { days: 24 }).toISOString().substring(0, 10) }
             ]
           }
         ]
@@ -101,21 +101,21 @@ export default (type, month, year) => {
           {
             id: uuid(),
             name: 'Groceries',
-            planned: 500,
+            planned: faker.finance.amount(300, 600),
             transactions: [
-              { id: uuid(), amount: 150, source: 'Smiths', date: add(d, { days: 2 }).toISOString().substring(0, 10) },
-              { id: uuid(), amount: 100, source: 'Smiths', date: add(d, { days: 9 }).toISOString().substring(0, 10) },
-              { id: uuid(), amount: 100, source: 'Smiths', date: add(d, { days: 15 }).toISOString().substring(0, 10) },
-              { id: uuid(), amount: 50, source: 'Smiths', date: add(d, { days: 22 }).toISOString().substring(0, 10) }
+              { id: uuid(), amount: faker.finance.amount(50, 100), source: 'Smiths', date: add(d, { days: 2 }).toISOString().substring(0, 10) },
+              { id: uuid(), amount: faker.finance.amount(50, 100), source: 'Smiths', date: add(d, { days: 9 }).toISOString().substring(0, 10) },
+              { id: uuid(), amount: faker.finance.amount(50, 100), source: 'Smiths', date: add(d, { days: 15 }).toISOString().substring(0, 10) },
+              { id: uuid(), amount: faker.finance.amount(50, 100), source: 'Smiths', date: add(d, { days: 22 }).toISOString().substring(0, 10) }
             ]
           },
           {
             id: uuid(),
             name: 'Restaurants',
-            planned: 50,
+            planned: faker.finance.amount(10, 75),
             transactions: [
-              { id: uuid(), amount: 25, source: 'Smash Burgers', date: add(d, { days: 4 }).toISOString().substring(0, 10) },
-              { id: uuid(), amount: 25, source: 'Costa Vida', date: add(d, { days: 20 }).toISOString().substring(0, 10) }
+              { id: uuid(), amount: faker.finance.amount(5, 30), source: 'Smash Burgers', date: add(d, { days: 4 }).toISOString().substring(0, 10) },
+              { id: uuid(), amount: faker.finance.amount(5, 30), source: 'Costa Vida', date: add(d, { days: 20 }).toISOString().substring(0, 10) }
             ]
           }
         ]
@@ -129,23 +129,23 @@ export default (type, month, year) => {
           {
             id: uuid(),
             name: 'Wellness Checks',
-            planned: 0,
+            planned: faker.finance.amount(0, 25),
             transactions: []
           },
           {
             id: uuid(),
             name: 'Medications',
-            planned: 25,
+            planned: faker.finance.amount(5, 10),
             transactions: [
-              { id: uuid(), amount: 12.5, source: 'Smiths Pharmacy', date: add(d, { days: 7 }).toISOString().substring(0, 10) }
+              { id: uuid(), amount: faker.finance.amount(5, 10), source: 'Smiths Pharmacy', date: add(d, { days: 7 }).toISOString().substring(0, 10) }
             ]
           },
           {
             id: uuid(),
             name: 'Gym Membership',
-            planned: 25,
+            planned: faker.finance.amount(10, 35),
             transactions: [
-              { id: uuid(), amount: 24.95, source: 'Vasa Fitness', date: add(d, { days: 1 }).toISOString().substring(0, 10) }
+              { id: uuid(), amount: faker.finance.amount(10, 35), source: 'Vasa Fitness', date: add(d, { days: 1 }).toISOString().substring(0, 10) }
             ]
           }
         ]
@@ -159,25 +159,25 @@ export default (type, month, year) => {
           {
             id: uuid(),
             name: 'Auto',
-            planned: 50,
+            planned: faker.finance.amount(10, 100),
             transactions: [
-              { id: uuid(), amount: 49.50, source: 'Esurance', date: add(d, { days: 3 }).toISOString().substring(0, 10) }
+              { id: uuid(), amount: faker.finance.amount(10, 100), source: 'Esurance', date: add(d, { days: 3 }).toISOString().substring(0, 10) }
             ]
           },
           {
             id: uuid(),
             name: 'House',
-            planned: 50,
+            planned: faker.finance.amount(10, 100),
             transactions: [
-              { id: uuid(), amount: 49.50, source: 'Esurance', date: add(d, { days: 3 }).toISOString().substring(0, 10) }
+              { id: uuid(), amount: faker.finance.amount(10, 100), source: 'Esurance', date: add(d, { days: 3 }).toISOString().substring(0, 10) }
             ]
           },
           {
             id: uuid(),
             name: 'Life',
-            planned: 25,
+            planned: faker.finance.amount(10, 100),
             transactions: [
-              { id: uuid(), amount: 25, source: 'Esurance', date: add(d, { days: 22 }).toISOString().substring(0, 10) }
+              { id: uuid(), amount: faker.finance.amount(10, 100), source: 'Esurance', date: add(d, { days: 22 }).toISOString().substring(0, 10) }
             ]
           }
         ]
@@ -191,17 +191,17 @@ export default (type, month, year) => {
           {
             id: uuid(),
             name: 'Emergency Fund',
-            planned: 25,
+            planned: faker.finance.amount(15, 100),
             transactions: [
-              { id: uuid(), amount: 25, source: 'Zions Banks', date: add(d, { days: 26 }).toISOString().substring(0, 10) }
+              { id: uuid(), amount: faker.finance.amount(15, 100), source: 'Zions Banks', date: add(d, { days: 26 }).toISOString().substring(0, 10) }
             ]
           },
           {
             id: uuid(),
             name: 'Investments',
-            planned: 25,
+            planned: faker.finance.amount(10, 100),
             transactions: [
-              { id: uuid(), amount: 25, source: 'Charles Schwab', date: add(d, { days: 26 }).toISOString().substring(0, 10) }
+              { id: uuid(), amount: faker.finance.amount(10, 100), source: 'Charles Schwab', date: add(d, { days: 26 }).toISOString().substring(0, 10) }
             ]
           }
         ]
@@ -215,26 +215,26 @@ export default (type, month, year) => {
           {
             id: uuid(),
             name: 'Tithing',
-            planned: 500,
+            planned: faker.finance.amount(300, 500),
             transactions: [
-              { id: uuid(), amount: 250, source: 'LDS Church', date: add(d, { days: 8 }).toISOString().substring(0, 10) },
-              { id: uuid(), amount: 250, source: 'LDS Church', date: add(d, { days: 22 }).toISOString().substring(0, 10) }
+              { id: uuid(), amount: faker.finance.amount(150, 250), source: 'LDS Church', date: add(d, { days: 8 }).toISOString().substring(0, 10) },
+              { id: uuid(), amount: faker.finance.amount(150, 250), source: 'LDS Church', date: add(d, { days: 22 }).toISOString().substring(0, 10) }
             ]
           },
           {
             id: uuid(),
             name: 'Fast Offerings',
-            planned: 50,
+            planned: faker.finance.amount(25, 100),
             transactions: [
-              { id: uuid(), amount: 50, source: 'LDS Church', date: add(d, { days: 8 }).toISOString().substring(0, 10) }
+              { id: uuid(), amount: faker.finance.amount(25, 100), source: 'LDS Church', date: add(d, { days: 8 }).toISOString().substring(0, 10) }
             ]
           },
           {
             id: uuid(),
             name: 'Other Charitable Contributions',
-            planned: 10,
+            planned: faker.finance.amount(5, 50),
             transactions: [
-              { id: uuid(), amount: 10, source: 'LDS Church', date: add(d, { days: 8 }).toISOString().substring(0, 10) }
+              { id: uuid(), amount: faker.finance.amount(5, 50), source: 'LDS Church', date: add(d, { days: 8 }).toISOString().substring(0, 10) }
             ]
           }
         ]
@@ -248,17 +248,17 @@ export default (type, month, year) => {
           {
             id: uuid(),
             name: 'Mastercard',
-            planned: 40,
+            planned: faker.finance.amount(10, 100),
             transactions: [
-              { id: uuid(), amount: 40, source: 'Zions Bank', date: add(d, { days: 24 }).toISOString().substring(0, 10) }
+              { id: uuid(), amount: faker.finance.amount(10, 100), source: 'Zions Bank', date: add(d, { days: 24 }).toISOString().substring(0, 10) }
             ]
           },
           {
             id: uuid(),
             name: 'Signature Loan',
-            planned: 25,
+            planned: faker.finance.amount(19, 75),
             transactions: [
-              { id: uuid(), amount: 25, source: 'Zions Bank', date: add(d, { days: 24 }).toISOString().substring(0, 10) }
+              { id: uuid(), amount: faker.finance.amount(19, 75), source: 'Zions Bank', date: add(d, { days: 24 }).toISOString().substring(0, 10) }
             ]
           }
         ]
