@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@faker-js/faker': ^7.5.0
   '@mdi/js': ^7.0.96
   '@playwright/test': ^1.26.1
   '@reduxjs/toolkit': ^1.8.5
@@ -57,6 +58,7 @@ dependencies:
   recoil: 0.7.5_biqbaboplfbrettd7655fr4n2y
 
 devDependencies:
+  '@faker-js/faker': 7.5.0
   '@playwright/test': 1.26.1
   '@tailwindcss/forms': 0.5.3_tailwindcss@3.1.8
   '@tailwindcss/typography': 0.5.7_tailwindcss@3.1.8
@@ -1063,6 +1065,11 @@ packages:
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@faker-js/faker/7.5.0:
+    resolution: {integrity: sha512-8wNUCCUHvfvI0gQpDUho/3gPzABffnCn5um65F8dzQ86zz6dlt4+nmAA7PQUc8L+eH+9RgR/qzy5N/8kN0Ozdw==}
+    engines: {node: '>=14.0.0', npm: '>=6.0.0'}
     dev: true
 
   /@gar/promisify/1.1.3:

@@ -26,8 +26,8 @@ Chart.register(
 
 export default function Charts (props) {
   return (
-    <div className="w-full p-4 h-full">
-      <h1 className="prose prose-2xl mb-1">Charts</h1>
+    <div className="w-full px-8 py-4 h-full">
+      <h1 className="prose prose-2xl mb-3">Charts</h1>
       <div className="h-[calc(100%-8rem)] overflow-y-auto">
         <DOMInteractive />
         <DOMComplete />
