@@ -9,9 +9,9 @@ export default function Accordion ({ amount, border, children, title }) {
 
   useEffect(() => {
     if (typeof amount === 'string') {
-      if (amount.includes('$')) setDisplayAmount(amount)
+      if (amount?.includes('$')) setDisplayAmount(amount)
       else setDisplayAmount(currency(Number(amount)))
-    } else {
+    } else if (!Number.isNaN(amount)) {
       setDisplayAmount(currency(amount))
     }
   }, [amount])

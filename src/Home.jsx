@@ -11,7 +11,7 @@ export default function Home () {
       <li><Link to="/05-mobx">05-mobx</Link></li>
       <li><Link to="/06-redux">06-redux</Link></li>
       <li><Link to="/07-recoil">07-recoil</Link></li>
+      <li className="mt-4"><Link to="/charts">Charts</Link></li>
     </ul>
   </div>)
 }
-  

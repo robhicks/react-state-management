@@ -12,6 +12,7 @@ specifiers:
   artillery: 2.0.0-23
   artillery-engine-playwright: ^0.2.0
   autoprefixer: ^10.4.12
+  chart.js: ^3.9.1
   currency: ^4.1.0
   daisyui: ^2.31.0
   date-fns: ^2.29.3
@@ -26,8 +27,10 @@ specifiers:
   mobx: ^6.6.2
   mobx-react-lite: ^3.4.0
   npm-run-all: ^4.1.5
+  playwright: ^1.26.1
   postcss: ^8.4.17
   react: ^18.2.0
+  react-chartjs-2: ^4.3.1
   react-dom: ^18.2.0
   react-redux: ^8.0.4
   react-router-dom: ^6.4.2
@@ -39,6 +42,7 @@ specifiers:
 dependencies:
   '@mdi/js': 7.0.96
   '@reduxjs/toolkit': 1.8.5_kuo2ie247izvzll3jejufdtq3q
+  chart.js: 3.9.1
   currency: 4.1.0
   date-fns: 2.29.3
   express: 4.18.1
@@ -46,6 +50,7 @@ dependencies:
   mobx: 6.6.2
   mobx-react-lite: 3.4.0_qrr2ojv4n7h7ey2xj7njerqqr4
   react: 18.2.0
+  react-chartjs-2: 4.3.1_2unjvz6v6rskedwoxtmbfw2rje
   react-dom: 18.2.0_react@18.2.0
   react-redux: 8.0.4_5uumaiclxbdbzaqafclbf6maf4
   react-router-dom: 6.4.2_biqbaboplfbrettd7655fr4n2y
@@ -69,6 +74,7 @@ devDependencies:
   eslint-plugin-promise: 6.0.1_eslint@8.24.0
   eslint-plugin-react: 7.31.8_eslint@8.24.0
   npm-run-all: 4.1.5
+  playwright: 1.26.1
   postcss: 8.4.17
   tailwindcss: 3.1.8_postcss@8.4.17
   vite: 3.1.5
@@ -2759,6 +2765,10 @@ packages:
   /charenc/0.0.2:
     resolution: {integrity: sha512-yrLQ/yVUFXkzg7EDQsPieE/53+0RlaWTs+wBrvW36cyilJ2SaDWfl4Yj7MtLTXleV9uEKefbAGUPv2/iWSooRA==}
     dev: true
+
+  /chart.js/3.9.1:
+    resolution: {integrity: sha512-Ro2JbLmvg83gXF5F4sniaQ+lTbSv18E+TIf2cOeiH1Iqd2PGFOtem+DUufMZsCJwFE7ywPOpfXFBwRTGq7dh6w==}
+    dev: false
 
   /check-error/1.0.2:
     resolution: {integrity: sha512-BrgHpW9NURQgzoNyjfq0Wu6VFO6D7IZEmJNdtgNqpzGG8RuNFHt2jQxWlAs4HMe119chBnv+34syEZtc6IhLtA==}
@@ -7427,6 +7437,16 @@ packages:
       ini: 1.3.8
       minimist: 1.2.6
       strip-json-comments: 2.0.1
+
+  /react-chartjs-2/4.3.1_2unjvz6v6rskedwoxtmbfw2rje:
+    resolution: {integrity: sha512-5i3mjP6tU7QSn0jvb8I4hudTzHJqS8l00ORJnVwI2sYu0ihpj83Lv2YzfxunfxTZkscKvZu2F2w9LkwNBhj6xA==}
+    peerDependencies:
+      chart.js: ^3.5.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      chart.js: 3.9.1
+      react: 18.2.0
+    dev: false
 
   /react-dom/18.2.0_react@18.2.0:
     resolution: {integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==}

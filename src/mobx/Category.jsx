@@ -22,7 +22,6 @@ const Category = observer(({ category }) => {
     })
     const planned = cat?.items?.reduce((p, c) => reducer(p, c, 'planned'), 0) || 0
     const actual = cat?.items?.reduce((p, c) => reducer(p, c, 'actual'), 0) || 0
-    console.log('planned', planned)
     setPlanned(planned)
     setActual(actual)
     setRemaining(planned - actual)
