@@ -29,7 +29,7 @@ const Categories = () => {
   if (currentMonthlyBudget) {
     return (
     <div className="">
-      <Accordion amount={incomeAmount} border title="Income">
+      <Accordion amount={incomeAmount} border title="Income" selector="Income">
         <div className="h-1 mt-1 border-t border-gray-300"></div>
         {currentMonthlyBudget.categories.income.map((cat) =>
           <Category key={cat.id} category={cat} />

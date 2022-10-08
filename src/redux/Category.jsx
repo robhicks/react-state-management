@@ -39,7 +39,7 @@ const Category = ({ category }) => {
   }
 
   return (
-    <Accordion amount={amount} title={<InPlaceEditor value={category.name} setValue={updateName} />}>
+    <Accordion amount={amount} title={<InPlaceEditor value={category.name} setValue={updateName} />} selector={category.name}>
       <div className="pt-2">
         {category.items.map((item) =>
           <Item key={item.id} item={item} />

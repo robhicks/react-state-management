@@ -12,16 +12,19 @@ test('test', async ({ page }) => {
   await page.locator('text=04-use-reducer').click()
   await expect(page).toHaveURL('http://localhost:5173/04-use-reducer')
 
+  await page.locator('#previous-month').click()
+  await page.locator('#previous-month').click()
+  await page.locator('#next-month').click()
+  await page.locator('#next-month').click()
   await page.locator('#next-month').click()
   await page.locator('button:has-text("Create Monthly Budget")').click()
-  await page.locator('text=$5,000.00Income >> button').click()
-  await page.locator('text=$5,000.00Employment >> button').click()
+  await page.locator('.Income').click()
+  await page.locator('.Employment').click()
   await page.locator('input[type="number"]').first().click()
   await page.locator('input[type="number"]').first().click()
   await page.locator('input[type="number"]').first().click()
   await page.locator('input[type="number"]').first().click()
-  await page.locator('text=Paycheck #1$2,500.00Planned: Transactions >> [placeholder="Amount"]').click()
-
+  await page.locator(':nth-match([placeholder="Amount"], 1)').click()
   const perfEntries = await page.evaluate(() => performance.getEntries())
 
   const largestContentfulPaint = await page.evaluate(() => {

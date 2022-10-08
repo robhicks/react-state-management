@@ -40,7 +40,7 @@ export default function Category ({ budget, category, setBudget }) {
   }
 
   return (
-    <Accordion amount={amount} title={<InPlaceEditor value={category.name} setValue={updateName} />}>
+    <Accordion amount={amount} title={<InPlaceEditor value={category.name} setValue={updateName} />} selector={category.name}>
       <div className="pt-2">
         {category.items.map((item) =>
           <Item budget={budget} setBudget={setBudget} key={item.id} item={item} />
