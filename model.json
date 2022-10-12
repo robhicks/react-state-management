@@ -1,0 +1,32 @@
+{
+  "active": "string",
+  "name": "string",
+  "id": "string",
+  "monthlyBudgets": [
+    {
+      "id": "string",
+      "month": "number",
+      "year": "number",
+      "categories": {
+        "income": [],
+        "expense": [
+          { 
+            "id": "string",
+            "name": "string",
+            "fund": "boolean",
+            "items": [
+              {
+                "id": "string",
+                "name": "string",
+                "planned": "number",
+                "transactions": [
+                  { "id": "string", "amount": "number", "source": "string", "date": "date string"}
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

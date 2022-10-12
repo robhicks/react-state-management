@@ -1,0 +1,9 @@
+config:
+  target: "http://localhost:5000"
+  engines:
+    playwright: {}
+  processor: "./reducer.cjs"
+scenarios:
+  - engine: playwright
+    flowFunction: "pageLoad"
+    flow: []
