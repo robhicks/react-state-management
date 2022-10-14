@@ -35,7 +35,7 @@ export default function Item ({ budget, item, setBudget }) {
     setPlanned(value)
     const bud = copy(budget)
     const { item: itm } = getItemData(bud, item.id)
-    itm.planned = Number(value)
+    itm.planned = +value
     setBudget({ ...budget, ...bud })
   }
 

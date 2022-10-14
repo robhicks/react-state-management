@@ -39,14 +39,14 @@ export default function Transaction ({ budget, setBudget, transaction }) {
   const amountChangeHandler = (ev) => {
     const bud = copy(budget)
     const { transaction: tx } = getTransactionData(bud, transaction.id)
-    tx.amount = Number(ev.target.value)
+    tx.amount = +ev.target.value
     setBudget((cur) => ({ ...cur, ...bud }))
   }
 
   // console.log('transaction', transaction)
 
   return (
-    <div className="grid grid-cols-4 gap-2 mb-1">
+    <div className="grid grid-cols-4 gap-2 mb-1 items-center">
       <input type="date" value={transaction.date} onChange={dateChangeHandler} min={minDate} max={maxDate} />
       <input type="text" placeholder="Source" value={transaction.source} onInput={sourceChangeHandler} />
       <input type="number" placeholder="Amount" value={transaction.amount} onInput={amountChangeHandler} />

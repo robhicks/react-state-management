@@ -48,7 +48,7 @@ const Transaction = ({ transaction }) => {
   const amountChangeHandler = (ev) => {
     const bud = copy(budget)
     const { category, item, transaction: tx } = getTransactionData(bud, transaction.id)
-    tx.amount = Number(ev.target.value)
+    tx.amount = +ev.target.value
     item.actual = item.transactions.reduce((p, c) => reducer(p, c, 'amount'), 0)
     item.remaining = item.planned - item.actual
     category.actual = category.items.reduce((p, c) => reducer(p, c, 'actual'), 0)

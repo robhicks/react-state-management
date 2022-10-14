@@ -30,7 +30,7 @@ const Item = ({ item }) => {
     setPlanned(value)
     const bud = copy(budget)
     const { category, item: itm } = getItemData(bud, item.id)
-    itm.planned = Number(value)
+    itm.planned = +value
     category.planned = category.items.reduce((p, c) => reducer(p, c, 'planned'))
     category.remaining = category.planned - category.actual
     setBudget({ ...budget, ...bud })

@@ -60,7 +60,7 @@ const budgetSlice = createSlice({
     changeItemPlannedAmount (state, { payload: { itemId, amount } }) {
       const bud = copy(state)
       const { item } = getItemData(bud, itemId)
-      item.planned = Number(amount)
+      item.planned = +amount
       const ns = { ...state, ...bud, currentDate: currentDate(state.currentDate) }
       return ns
     },

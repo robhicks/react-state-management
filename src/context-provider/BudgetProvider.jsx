@@ -75,7 +75,7 @@ export const BudgetProvider = ({ children }) => {
     setBudget((cur) => {
       const bud = copy(cur)
       const { item } = getItemData(bud, itemId)
-      item.planned = Number(amount)
+      item.planned = +amount
       return bud
     })
   }
@@ -84,7 +84,7 @@ export const BudgetProvider = ({ children }) => {
     setBudget((cur) => {
       const bud = copy(cur)
       const { transaction } = getTransactionData(bud, txId)
-      transaction.amount = Number(amount)
+      transaction.amount = +amount
       return bud
     })
   }

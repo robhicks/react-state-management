@@ -4,11 +4,11 @@ export const reducer = (p, c, key) => {
   let pVal = 0
   let cVal = 0
   if (isObject(p)) {
-    pVal = Number(p[key] || 0)
-    cVal = Number(c[key] || 0)
+    pVal = +(p[key] || 0)
+    cVal = +(c[key] || 0)
   } else {
-    pVal = Number(p || 0)
-    cVal = Number(c[key] || 0)
+    pVal = +(p || 0)
+    cVal = +(c[key] || 0)
   }
 
   const results = pVal + cVal

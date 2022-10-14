@@ -43,7 +43,7 @@ export class BudgetModel {
   changeItemPlannedAmount = (itemId, amount) => {
     const budget = copy(this)
     const { item } = getItemData(budget, itemId)
-    item.planned = Number(amount)
+    item.planned = +amount
     this.monthlyBudgets = budget.monthlyBudgets
   }
 

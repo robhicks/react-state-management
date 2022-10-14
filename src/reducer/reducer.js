@@ -44,7 +44,7 @@ const reducer = (state, action) => {
     case 'CHANGE_ITEM_PLANNED_AMOUNT': {
       const budget = copy(state)
       const { category, item } = getItemData(budget, action.itemId)
-      item.planned = Number(action.amount)
+      item.planned = +action.amount
       category.planned = category.items.reduce((p, c) => amountReducer(p, c, 'planned'), 0)
       category.remaining = category.planned - category.actual
       const newState = { ...state, ...budget }
@@ -74,7 +74,7 @@ const reducer = (state, action) => {
     case 'CHANGE_TRANSACTION_AMOUNT': {
       const budget = copy(state)
       const { transaction } = getTransactionData(budget, action.transactionId)
-      transaction.amount = Number(action.amount)
+      transaction.amount = +action.amount
       return { ...state, ...budget }
     }
     case 'SET_ACTIVITY': {
