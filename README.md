@@ -1,336 +1,108 @@
-# React State Management in Complex Applications
+# React State Management for Apps with Complex States
 
-This document focusses on managing state in React applications that have complex states. States can be considered complex if they are required by a large number of components, are large and cannot be destructured practically and easily into smaller segments, or require internal consistencies that would make them difficult to manage if separated.
+## Background
+A few years ago I was involved in developing an administrative web application to allow users to create projects that other users would use to digitize the text from images. The app was  was written in native web components because we had recently been burned when the Angular team decided to rewrite Angular.
 
-The goal of managing complex states in an application should be focussed on the following guiding principles:
+Back then, largely in part because Angular 1.x had such horrible performance for two-way data bindings, the mantra for managing state in native web components was a one-way flow through string attributes for incoming data and emitting events to update state. 
 
-1. They should be easy to configure.
-2. They should be easy to manage.
-3. They should be easy to consume.
-4. They should be easy to troubleshoot.
-5. They should be performant.
+In order to improve unit testing, we also composed the app of a lot of components. Each component had its job and it was easy to test.
 
-## Complex States
+That's when the wheels fell off the bus. The app was pig slow doing what needed to be done. Components were constantly re-rending, and multiple event listeners for state update events were a nightmare to debug.  We eventually go the app usable but it still suffers from state update issues. The app is currently being rewritten using React.
 
-### Large Number of Consumers
+About a year ago, I also became interested in Web 3 distributed apps. On a vacation to Yellowstone, my wife and I were using a personal budgeting app on our phones. It was useless because the app couldn't get a decent internet connection. In addition, shortly after we got back, we were informed that another app we used had been hacked and our data was in the wild. 
 
-Adopting the unix philosophy of do one thing and do it well, today's best practices teach us to subdivide application functionality into many components. While that makes it easy to build and test components independently, it also results in greater problems in managing overall application state. Take as an example, a personal finance budgeting application. The state for the application will likely include multiple budgets, multiple year and monthly budgets, income and expense categories, planning activities and transaction tracking. Overall, a personal finance budgeting application should present the user with a birds-eye view of all financial activity, while each transaction needs to have visibility into a specific piece of state while supporting broader state update functionality.
+Being frustrated, I decided I would write an offline first, real-time, distributed personal budgeting progressive web app to see if it could feasibly be done.  As I started doing so, I realized one of the challenges of the app was dealing with a fairly complex state. 
 
-### Interconnected State
+Being fairly new to React but knowing of the budgeting app's state complexity, I began looking at the state management options available in the React ecosystem. Since there were/are a number of them, I then decided I needed a way to analyze them with the end of picking the right one for the budgeting app. 
 
-###
+In this document, we're going build a personal budgeting app using various statement management options and then analyze them to determine which is best for the app. Note, it won' t be an app that can be deployed because we won't have implemented any security or persistence. 
 
-## Tools for State Management
+## Analytical Framework
 
-React itself and the React echo system offer a lot of potential tools to help manage state. The tools range from hoisted state and prop drilling to libraries like Redux, Recoil and MobX. But unfortunately, the number of tools also makes it difficult to choose one. To help in making better choices, we'll build a contrived application using a number of different tools. Then we'll be in a better position to analyze each against the goals stated above.
+My analysis lead me to asking how do you know when you are dealing with complex state. If you're not, you probably don't need to worry about a solution to manage state and certainly don't need an analytical framework to decide how to manage it. 
 
-## Test Application
+I concluded the way to decide if you are dealing with complex state is to determine 1) how many components are going to need to consume the state, 2) how many interdependencies will exist between different parts of the state, and 3) how many derived properties need to be calculated using the state.  If the answer to each is a large number, you probably need to start thinking about how to manage the state. 
 
-We're going to build part of a budgeting application for personal finance. The application will support multiple budgets, each supporting one more more monthly/year budgets, and each of them with income and expense categories, and each category with planning and transaction tracking.
+Given the state management choices for the React, I decided to analyze the apparent choices against the following criteria:
 
-We're going to build the application using Vite and TailwindCss so we can focus on code and not UI Libraries. We won't go into the steps necessary to create a Vite React app with TailwindCss. You can find them at the [Vite](https://vitejs.dev/guide/#overview) and [TailwindCss](https://tailwindcss.com/docs/installation) sites.
+* Easy to configure
+* Easy to manage
+* Easy to consume
+* Easy to trouble shoot
+* Performant
 
-### Hoisted State and Prop Drilling
+### Easy to Configure
 
-We'll start using hoisted state and prop drilling because it is the most basic way of managing state. Typically, building an app in this manner is iterative. We start using local state for each component and then pass the props we need to child components. Eventually, we arrive at a point where we have hoisted state to where it should live based upon our model. We have an advantage because we know the shape of the model. Here's the model:
+I don't like complex things. While they may be cool to build, they are hard for people to understand. So for me, the ideal solution should be easy to configure, and implied in the ease of configuration, is an assumption that the solution should be easy to understand. 
 
-``` JavaScript
+### Easy to Manage
+
+I also concluded the chosen solution should be easy to manage or maintain. I don't like doing significant refactors when managing things. Large refactors mean breaking things. 
+
+### Easy to Consume
+
+Most of us work on projects with other engineers. Some are seasoned, some are not. The chosen solution should be easy to use for all engineers. 
+
+A good example of what not to do is something I wrote several years ago. I wrote an isomorphic (browser and node) hypermedia client  to work with a specific, complex API. I thought it was elegant and pretty powerful. New people joining the team wanted to scream and run when they tried to use it. The ones wanting to scream and run were seasoned engineers. New engineers just cowered in the corner hoping and praying they would never have to use it, and secretly started looking for another team or job.
+
+### Easy to Troubleshoot
+
+As I mentioned above, troubleshooting apps with complex state can be a real nightmare unless you either use tools to help manage state or you have a solid discipline of enforcing how state is managed. Some things I have learned, include the following: 
+
+* Push state as low as possible
+* Corollary, to pushing state as low as possible is Hoisting state only when necessary
+* Never modify the original state. Treat it as immutable even if it is not
+* Don't store derived state and calculate it where it's needed
+
+Hopefully, the forgoing are intuitive and self explanatory because we aren't going to spend more time on them except in the discipline used to analyze the various state management options.
+
+### Performant
+
+Nobody likes to go into seemingly endless refactoring iterations because a code solution is so slow users complain. 
+
+## React State Management Options
+
+The budget app we're going to build will be implemented in the following options:
+
+* Hoisted - an app where the state is hoisted to the top and prop drilling is used to get it to the components that need it. 
+* Custom Hook - basically the same app as the Hoisted app but using a custom hook. Prop drilling is still used to make the state available to child components. 
+* Context Provider - the custom hook is basically integrated into a Context Provider to eliminate the need to drill props.
+* Reducer - an app that uses useReducer and consolidates update functionality in the reducer. 
+* MobX - an app that integrates MobX for state management.
+* Redux  - an app that integrates Redux for state management.
+* Recoil  - an app that integrates Recoil for state management.
+
+## The Budgeting App
+
+The app has been deployed on [render.com](https://render.com/). You can access it [here](https://react-state-management.onrender.com/). It may take some time to load if it has been sleeping. 
+
+The app has been developed using [Vite](https://vitejs.dev/), [tailwindcss](https://tailwindcss.com/) and [daisyUI](https://daisyui.com/). Vite helps build and deploy things quickly, while using tailwindcss and daisyUI let's us focus on  React code instead of styling. 
+
+The state is described by the following model:
+```JavaScript
 {
-  active: 'planned',
-  name: 'Family Budget',
-  id: '55f83ae6-7e27-43e5-80be-6f0b4342fe03',
-  monthlyBudgets: [
+  "name": "string",
+  "id": "string",
+  "monthlyBudgets": [
     {
-      id: '539836ee-fc18-42f9-b9c5-19d8d270db64',
-      month: 8,
-      year: 2022,
-      planned: 0,
-      actual: 0,
-      remaining: 0,
-      categories: {
-        income: [
-          {
-            name: 'Employment',
-            id: '7b947dca-e089-4f6d-bb8d-8b6fc689baba',
-            type: 'income',
-            planned: 0,
-            actual: 0,
-            remaining: 0,
-            fund: false,
-            items: [
+      "id": "string",
+      "month": "number",
+      "year": "number",
+      "categories": {
+        "income": [],
+        "expense": [
+          { 
+            "id": "string",
+            "name": "string",
+            "fund": "boolean",
+            "items": [
               {
-                name: 'Paycheck #1',
-                id: '4d09c030-b269-4790-a6c5-5c3d9e78fcb1',
-                planned: 0,
-                actual: 0,
-                remaining: 0,
-                transactions: []
-              },
-              {
-                name: 'Paycheck #2',
-                id: '256e67f4-0999-4064-9194-3dd64f869aa6',
-                planned: 0,
-                actual: 0,
-                remaining: 0,
-                transactions: []
-              }
-            ]
-          }
-        ],
-        expense: [
-          {
-            actual: 0,
-            id: 'bf19eaa4-29ff-48fe-aba1-3893192b166f',
-            name: 'Housing',
-            planned: 0,
-            remaining: 0,
-            type: 'expense',
-            fund: false,
-            items: [
-              {
-                actual: 0,
-                id: '9bbe16ff-f3fc-4511-b4f7-7daeca884fae',
-                name: 'Mortgage Payments',
-                planned: 0,
-                remaining: 0,
-                transactions: []
-              },
-              {
-                actual: 0,
-                id: '6dd780be-9a5f-4bb2-9516-9aa5c248ce13',
-                name: 'Maintenance',
-                planned: 0,
-                remaining: 0,
-                transactions: []
-              }
-            ]
-          },
-          {
-            actual: 0,
-            id: '1a678221-38a5-45dd-a590-77259e983b2b',
-            name: 'Transportation',
-            planned: 0,
-            remaining: 0,
-            type: 'expense',
-            fund: false,
-            items: [
-              {
-                actual: 0,
-                id: 'e76f5955-0833-4a12-9942-88827484031f',
-                name: 'Car Purchase',
-                planned: 0,
-                remaining: 0,
-                transactions: []
-              },
-              {
-                actual: 0,
-                id: '2e519ded-97e5-4bb4-8f7b-31c13e2bd23e',
-                name: 'Fuel',
-                planned: 0,
-                remaining: 0,
-                transactions: []
-              },
-              {
-                actual: 0,
-                id: '6665a437-ec03-40e0-a89a-dd700512476b',
-                name: 'Maintenance',
-                planned: 0,
-                remaining: 0,
-                transactions: []
-              }
-            ]
-          },
-          {
-            actual: 0,
-            id: '058d6f9a-ecac-4153-8bc3-8e7ef0b831a0',
-            name: 'Food',
-            planned: 0,
-            remaining: 0,
-            type: 'expense',
-            fund: false,
-            items: [
-              {
-                actual: 0,
-                id: '9f371c12-9702-40fd-bfdb-207083477619',
-                name: 'Groceries',
-                planned: 0,
-                remaining: 0,
-                transactions: []
-              },
-              {
-                actual: 0,
-                id: '44e41b21-55a9-4537-9c47-596dd03c4e72',
-                name: 'Restaurants',
-                planned: 0,
-                remaining: 0,
-                transactions: []
-              }
-            ]
-          },
-          {
-            actual: 0,
-            id: 'f478df81-97e8-4af6-b20d-401c0ea43efe',
-            name: 'Health',
-            planned: 0,
-            remaining: 0,
-            type: 'expense',
-            fund: false,
-            items: [
-              {
-                actual: 0,
-                id: 'd1edb431-6c54-4a02-a2b0-b1740a22109f',
-                name: 'Wellness Checks',
-                planned: 0,
-                remaining: 0,
-                transactions: []
-              },
-              {
-                actual: 0,
-                id: 'f5159bda-5afa-403f-9cb1-88befa568923',
-                name: 'Medications',
-                planned: 0,
-                remaining: 0,
-                transactions: []
-              },
-              {
-                actual: 0,
-                id: '6e030249-cd36-424f-81df-61cee6a33b43',
-                name: 'Gym Membership',
-                planned: 0,
-                remaining: 0,
-                transactions: []
-              }
-            ]
-          },
-          {
-            actual: 0,
-            id: 'c271500d-15ae-40aa-a661-d340565751c7',
-            name: 'Insurance',
-            planned: 0,
-            remaining: 0,
-            type: 'expense',
-            fund: false,
-            items: [
-              {
-                actual: 0,
-                id: 'd3c3c1af-ec92-46d8-b491-7aefa3ec29dc',
-                name: 'Auto',
-                planned: 0,
-                remaining: 0,
-                transactions: []
-              },
-              {
-                actual: 0,
-                id: '00cc10d9-1edf-4feb-96e5-1df03882c989',
-                name: 'House',
-                planned: 0,
-                remaining: 0,
-                transactions: []
-              },
-              {
-                actual: 0,
-                id: 'bdfd1424-e34f-4244-be5e-536afd7b99a2',
-                name: 'Life',
-                planned: 0,
-                remaining: 0,
-                transactions: []
-              }
-            ]
-          },
-          {
-            actual: 0,
-            id: '38af7798-5f65-42ae-89c5-91e735b7af49',
-            name: 'Savings',
-            planned: 0,
-            remaining: 0,
-            type: 'expense',
-            fund: false,
-            items: [
-              {
-                actual: 0,
-                id: 'df476fc7-68dc-4f27-9cd3-422350091786',
-                name: 'Emergency Fund',
-                planned: 0,
-                remaining: 0,
-                transactions: []
-              },
-              {
-                actual: 0,
-                id: '39b5bf3e-0ef4-48df-94b7-075b2f365faa',
-                name: 'Charles Schwab',
-                planned: 0,
-                remaining: 0,
-                transactions: []
-              },
-              {
-                actual: 0,
-                id: 'd269e647-e65e-459d-a049-8d06b7f30a19',
-                name: "Zion's Banks",
-                planned: 0,
-                remaining: 0,
-                transactions: []
-              }
-            ]
-          },
-          {
-            actual: 0,
-            id: '30cc32f8-3794-44fd-9630-14182c569a16',
-            name: 'Giving',
-            planned: 0,
-            remaining: 0,
-            type: 'expense',
-            fund: false,
-            items: [
-              {
-                actual: 0,
-                id: 'c82a60b2-7915-4427-8c70-2bdd9c390a1d',
-                name: 'Tithing',
-                planned: 0,
-                remaining: 0,
-                transactions: []
-              },
-              {
-                actual: 0,
-                id: 'bcacaaad-384e-424a-b95f-8553cdc3c88c',
-                name: 'Fast Offerings',
-                planned: 0,
-                remaining: 0,
-                transactions: []
-              },
-              {
-                actual: 0,
-                id: '83df0cd8-db82-4523-8097-a282b01c025e',
-                name: 'Other Charitable Contributions',
-                planned: 0,
-                remaining: 0,
-                transactions: []
-              }
-            ]
-          },
-          {
-            actual: 0,
-            id: 'f8f2133e-f2d9-4d79-bdc1-77f3c01fb281',
-            name: 'Debt',
-            planned: 0,
-            remaining: 0,
-            type: 'expense',
-            fund: false,
-            items: [
-              {
-                actual: 0,
-                id: '778e4730-73f4-4087-97a5-57dfe87290cc',
-                name: 'Mastercard',
-                planned: 0,
-                remaining: 0,
-                transactions: []
-              },
-              {
-                actual: 0,
-                id: '11ce6851-bd2e-4f4e-89bf-16185134c627',
-                name: 'Signature Loan',
-                planned: 0,
-                remaining: 0,
-                transactions: []
+                "id": "string",
+                "name": "string",
+                "planned": "number",
+                "transactions": [
+                  { "id": "string", "amount": "number", "source": "string", "date": "date string"}
+                ]
               }
             ]
           }
@@ -340,3 +112,73 @@ We'll start using hoisted state and prop drilling because it is the most basic w
   ]
 }
 ```
+Note that the model has been simplified to only work on one budget, say a family budget. A more complex model would support multiple budgets.
+
+<video controls width="800px">
+  <source src="./media/app-overview.webm">
+</video>
+
+The app has the following base custom React components for each implementation. :
+* index.jsx
+
+  index.jsx is the entry point for each of the implementations. The purpose of index.jsx is to set up the implementation and includes the Budget component.
+* Budget.jsx
+
+	<video controls width="800px">
+		<source src="./media/hoisted-budget.jsx.webm">
+	</video>
+
+	We start with Budget.jsx. In the hoisted model, this is where state is handled. It is managed using a useState hook. 
+	
+	We also use 3 other components, InPlaceEditor, BudgetDatePicker and ActivityFilter. These components are used by all of the implementations. The InPlaceEditor component is used to edit   properties, such as the budget name. The BudgetDatePicker component is used to set the current date, from which the month and year is calculated and is used to select a specific monthly budget. The ActivityFilter component is use to filter displayed values for amounts of the budget that are planned, actual and remaining
+	
+	The initial state is created using the getModel function found in /utils/budget-model-generator. We use the same starting model structure for all of the budget implementations. The initial state model includes monthly budgets for all of the months of 2022 through September. 
+	
+	Two other things to note include a useEffect hook and handlers for changing the name of the budget and activity and current date for the budget. 
+	
+	The purpose of the useEffect hook is to calculate the difference between what has been planned for a month and what has been spent for a month. We have named this 'remaining' throughout the budget. 
+	
+	All of the handlers in the file use setBudget directly by passing in a callback to get the current value before apply an update to the value. 
+	
+	Finally, we add budget and setBudget to the MonthlyBudgets component so that child components can access them or pass them to their children.
+ 
+* MonthlyBudgets.jsx
+
+  <video controls width="800px">
+		<source src="./media/hoisted-monthlybudgets.jsx.webm">
+	</video>
+
+  MonthlyBudgets is the only child component of the Budget component. It either displays a monthly budget, using the MonthlyBudget component, or displays a card which allows the user to create a monthly budget if one does not exist.
+
+  MonthlyBudgets has two properties, the budget property and the setBudget property. Im the hoisted model these are passed through all of the components. 
+
+  Since the current monthly budget is just one of many monthly budgets in the model, the current monthly budget is selected through a useEffect hook. The useEffect hook changes when the current date changes for the monthly budgets change. 
+
+  The MonthlyBudgets component create new monthly budgets using a button handler and the getMonthlyBudget method in /utils/budget-model-generator. The getMonthlyBudget model generates a month that is structurally the same as other monthly budgets.
+
+  The MonthlyBudgets component has a single MonthlyBudget component. 
+
+* MonthlyBudget.jsx
+
+  The MonthlyBudget component is very simple. It creates a scrollable container to hold the categories associated with a monthly budget. Accordingly, it has one child component, Categories. It also passes it properties, budget and setBudget to the Categories component. 
+
+* Categories.jsx
+
+  The Categories component sets up two groups of categories, one for income categories and one for expense categories. 
+
+  It includes a useEffect to select the correct monthly budget based upon the current date and to calculate the planned, actual and remaining values for each of the income and expense group categories. 
+
+  It creates maps over the categories of the income and expense groups and passes the budget, category and setBudget properties to the mapped Category components. 
+
+* Category.jsx
+
+  The Category component calculates and displays the planned, actual and remaining balances of a category and displays items associated with the category. 
+
+  Note, rather than manipulating values of the model directly, we copy them when calculating the displayed amounts. We follow this practice throughout the implementations when necessary to prevent accidentally changing the model.
+
+* Item.jsx
+
+  The Item component displays items and transactions for a category. It supports changing the name of the Item, changing the planned amount for an item and adding an empty transaction. It also calculates the planned, actual and remaining balances of each item. 
+
+
+

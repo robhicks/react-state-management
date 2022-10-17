@@ -29,9 +29,9 @@ export default function Budget () {
     }
   }, [budget.currentDate, budget.monthlyBudgets])
 
-  const activityHandler = (val) => setBudget({ ...budget, active: val })
-  const currentDateHandler = (val) => setBudget({ ...budget, currentDate: val })
-  const nameChangeHandler = (val) => setBudget({ ...budget, name: val })
+  const activityHandler = (val) => setBudget((cur) => ({ ...cur, active: val }))
+  const currentDateHandler = (val) => setBudget((cur) => ({ ...cur, currentDate: val }))
+  const nameChangeHandler = (val) => setBudget((cur) => ({ ...cur, name: val }))
 
   return (
     <div className="h-full">

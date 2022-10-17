@@ -1,0 +1,143 @@
+# React State Management for Apps with Complex States
+
+## Background
+A few years ago I was involved in developing an administrative web application to allow users to create projects that other users would use to digitize the text from images. The app was  was written in native web components because we had recently been burned when the Angular team decided to rewrite Angular.
+
+Back then, largely in part because Angular 1.x had such horrible performance for two-way data bindings, the mantra for managing state in native web components was a one-way flow through string attributes for incoming data and emitting events to update state. 
+
+In order to improve unit testing, we also composed the app of a lot of components. Each component had its job and it was easy to test.
+
+That's when the wheels fell off the bus. The app was pig slow doing what needed to be done. Components were constantly re-rending, and multiple event listeners for state update events were a nightmare to debug.  We eventually go the app usable but it still suffers from state update issues. The app is currently being rewritten using React.
+
+About a year ago, I also became interested in Web 3 distributed apps. On a vacation to Yellowstone, my wife and I were using a personal budgeting app on our phones. It was useless because the app couldn't get a decent internet connection. In addition, shortly after we got back, we were informed that another app we used had been hacked and our data was in the wild. 
+
+Being frustrated, I decided I would write an offline first, real-time, distributed personal budgeting progressive web app to see if it could feasibly be done.  As I started doing so, I realized one of the challenges of the app was dealing with a fairly complex state. 
+
+Being fairly new to React but knowing of the budgeting app's state complexity, I began looking at the state management options available in the React ecosystem. Since there were/are a number of them, I then decided I needed a way to analyze them with the end of picking the right one for the budgeting app. 
+
+In this document, we're going build a personal budgeting app using various statement management options and then analyze them to determine which is best for the app. Note, it won' t be an app that can be deployed because we won't have implemented any security or persistence. 
+
+## Analytical Framework
+
+My analysis lead me to asking how do you know when you are dealing with complex state. If you're not, you probably don't need to worry about a solution to manage state and certainly don't need an analytical framework to decide how to manage it. 
+
+I concluded the way to decide if you are dealing with complex state is to determine 1) how many components are going to need to consume the state, 2) how many interdependencies will exist between different parts of the state, and 3) how many derived properties need to be calculated using the state.  If the answer to each is a large number, you probably need to start thinking about how to manage the state. 
+
+Given the state management choices for the React, I decided to analyze the apparent choices against the following criteria:
+
+* Easy to configure
+* Easy to manage
+* Easy to consume
+* Easy to trouble shoot
+* Performant
+
+### Easy to Configure
+
+I don't like complex things. While they may be cool to build, they are hard for people to understand. So for me, the ideal solution should be easy to configure, and implied in the ease of configuration, is an assumption that the solution should be easy to understand. 
+
+### Easy to Manage
+
+I also concluded the chosen solution should be easy to manage or maintain. I don't like doing significant refactors when managing things. Large refactors mean breaking things. 
+
+### Easy to Consume
+
+Most of us work on projects with other engineers. Some are seasoned, some are not. The chosen solution should be easy to use for all engineers. 
+
+A good example of what not to do is something I wrote several years ago. I wrote an isomorphic (browser and node) hypermedia client  to work with a specific, complex API. I thought it was elegant and pretty powerful. New people joining the team wanted to scream and run when they tried to use it. The ones wanting to scream and run were seasoned engineers. New engineers just cowered in the corner hoping and praying they would never have to use it, and secretly started looking for another team or job.
+
+### Easy to Troubleshoot
+
+As I mentioned above, troubleshooting apps with complex state can be a real nightmare unless you either use tools to help manage state or you have a solid discipline of enforcing how state is managed. Some things I have learned, include the following: 
+
+* Push state as low as possible
+* Corollary, to pushing state as low as possible is Hoisting state only when necessary
+* Never modify the original state. Treat it as immutable even if it is not
+* Don't store derived state and calculate it where it's needed
+
+Hopefully, the forgoing are intuitive and self explanatory because we aren't going to spend more time on them except in the discipline used to analyze the various state management options.
+
+### Performant
+
+Nobody likes to go into seemingly endless refactoring iterations because a code solution is so slow users complain. 
+
+## React State Management Options
+
+The budget app we're going to build will be implemented in the following options:
+
+* Hoisted - an app where the state is hoisted to the top and prop drilling is used to get it to the components that need it. 
+* Custom Hook - basically the same app as the Hoisted app but using a custom hook. Prop drilling is still used to make the state available to child components. 
+* Context Provider - the custom hook is basically integrated into a Context Provider to eliminate the need to drill props.
+* Reducer - an app that uses useReducer and consolidates update functionality in the reducer. 
+* MobX - an app that integrates MobX for state management.
+* Redux  - an app that integrates Redux for state management.
+* Recoil  - an app that integrates Recoil for state management.
+
+## The Budgeting App
+
+The app has been deployed on [render.com](https://render.com/). You can access it [here](https://react-state-management.onrender.com/). It may take some time to load if it has been sleeping. 
+
+The app has been developed using [Vite](https://vitejs.dev/), [tailwindcss](https://tailwindcss.com/) and [daisyUI](https://daisyui.com/). Vite helps build and deploy things quickly, while using tailwindcss and daisyUI let's us focus on  React code instead of styling. 
+
+The state is described by the following model:
+```JavaScript
+{
+  "name": "string",
+  "id": "string",
+  "monthlyBudgets": [
+    {
+      "id": "string",
+      "month": "number",
+      "year": "number",
+      "categories": {
+        "income": [],
+        "expense": [
+          { 
+            "id": "string",
+            "name": "string",
+            "fund": "boolean",
+            "items": [
+              {
+                "id": "string",
+                "name": "string",
+                "planned": "number",
+                "transactions": [
+                  { "id": "string", "amount": "number", "source": "string", "date": "date string"}
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+Note that the model has been simplified to only work on one budget, say a family budget. A more complex model would support multiple budgets.
+
+The app has the following base custom React components for each implementation. :
+* index.jsx
+* Budget.jsx
+
+	<video controls width="800px">
+		<source src="./media/">
+	</video>
+
+	We start with Budget.jsx. In the hoisted model, this is where state is handled. It is managed using a useState hook. 
+	
+	We also use 3 other components, InPlaceEditor, BudgetDatePicker and ActivityFilter. These components are used by all of the implementations. The InPlaceEditor component is used to edit select properties, such as the budget name. The BudgetDatePicker component is used to set the current date, from which the month and year is calculated and is used to select a specific monthly budget. The ActivityFilter component is use to filter displayed values for amounts of the budget that are planned, actual and remaining
+	
+	The initial state is created using the getModel function found in /utils/budget-model-generator. We use the same starting model structure for all of the budget implementations. The initial state model includes monthly budgets for all of the months of 2022 through September. 
+	
+	Two other things to note include a useEffect hook and handlers for chaning the name of the budget and activity and current date for the budget. 
+	
+	The purpose of the useEffect hook is to calculate the difference between what has been planned for a month and what has been spent for a month. We have named this 'remaining' throughout the budget. 
+	
+	All of the handlers in the file use setBudget directly by passing in a callback to get the current value before apply an update to the value. 
+	
+	Finally, we add budget and setBudget to the MonthlyBudgets component so that child components can access them or pass them to their children.
+ 
+
+
+
+
+
