@@ -12,6 +12,7 @@ export default function Home () {
       <li className="underline"><Link to="/06-redux">06-redux</Link></li>
       <li className="underline"><Link to="/07-recoil">07-recoil</Link></li>
       <li className="underline mt-4"><Link to="/charts">Charts</Link></li>
+      <li className="underline mt-4"><Link to="/doc">Documentation</Link></li>
     </ul>
   </div>)
 }

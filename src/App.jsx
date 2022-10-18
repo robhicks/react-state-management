@@ -11,6 +11,7 @@ const MobX = lazy(() => import('./mobx'))
 const Redux = lazy(() => import('./redux'))
 const Recoil = lazy(() => import('./recoil'))
 const Charts = lazy(() => import('./charts'))
+const Doc = lazy(() => import('./doc'))
 
 function App () {
   return (
@@ -29,6 +30,7 @@ function App () {
           <Route path="06-redux" element={<Suspense fallback={<div>Loading...</div>}><Redux /></Suspense>} />
           <Route path="07-recoil" element={<Suspense fallback={<div>Loading...</div>}><Recoil /></Suspense>} />
           <Route path="charts" element={<Suspense fallback={<div>Loading...</div>}><Charts /></Suspense>} />
+          <Route path="doc" element={<Suspense fallback={<div>Loading...</div>}><Doc /></Suspense>} />
         </Routes>
       </BrowserRouter>
   )

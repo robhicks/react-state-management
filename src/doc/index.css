@@ -1,0 +1,25 @@
+h1, h2, h3 {
+  @apply font-semibold mb-1
+}
+
+p {
+  @apply mb-1
+}
+
+ul {
+  @apply list-disc list-inside mb-1
+}
+
+h1 {
+  @apply text-2xl mb-2
+}
+h2 {
+  @apply text-xl
+}
+h3 {
+  @apply text-lg 
+}
+
+a {
+  @apply underline
+}
