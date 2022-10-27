@@ -31,6 +31,7 @@ export default function DOMComplete (props) {
       labels,
       datasets: [
         {
+          label: 'DOMComplete',
           backgroundColor: 'rgba(255, 20, 20, 0.75)',
           data: array
         }

@@ -31,6 +31,7 @@ export default function DOMInteractive (props) {
       labels,
       datasets: [
         {
+          label: 'DOMInteractive',
           backgroundColor: 'rgba(20, 20, 255, 0.75)',
           data: array
         }

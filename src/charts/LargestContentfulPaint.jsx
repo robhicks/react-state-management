@@ -31,6 +31,7 @@ export default function LargestContentfulPaint (props) {
       labels,
       datasets: [
         {
+          label: 'LargestContentfulPaint',
           backgroundColor: 'rgba(20, 255, 20, 0.75)',
           data: array
         }

@@ -31,6 +31,7 @@ export default function TotalBlockingTime (props) {
       labels,
       datasets: [
         {
+          label: 'TotalBlockingTime',
           backgroundColor: 'rgba(255, 255, 0, 1)',
           data: array
         }

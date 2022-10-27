@@ -10,7 +10,7 @@
       "categories": {
         "income": [],
         "expense": [
-          { 
+          {
             "id": "string",
             "name": "string",
             "fund": "boolean",
@@ -20,7 +20,13 @@
                 "name": "string",
                 "planned": "number",
                 "transactions": [
-                  { "id": "string", "amount": "number", "source": "string", "date": "date string"}
+                  {
+                    "id": "string",
+                    "amount": "number",
+                    "source": "string",
+                    "date": "date string",
+                    "note": "string"
+                  }
                 ]
               }
             ]
