@@ -8,11 +8,10 @@ export default function Home () {
       <li className="underline"><Link to="/02-custom-hook">02-custom-hook</Link></li>
       <li className="underline"><Link to="/03-context-provider">03-context-provider (provider)</Link></li>
       <li className="underline"><Link to="/04-use-reducer">04-use-reducer (reducer)</Link></li>
-      <li className="underline"><Link to="/05-mobx">05-mobx</Link></li>
-      <li className="underline"><Link to="/06-redux">06-redux</Link></li>
-      <li className="underline"><Link to="/07-recoil">07-recoil</Link></li>
+      <li className="underline"><Link to="/05-mobx">05-mobx (not approved)</Link></li>
+      <li className="underline"><Link to="/06-redux">06-redux (not approved)</Link></li>
+      <li className="underline"><Link to="/07-recoil">07-recoil (not approved)</Link></li>
       <li className="underline mt-4"><Link to="/charts">Charts</Link></li>
-      <li className="underline mt-4"><Link to="/doc">Documentation</Link></li>
     </ul>
   </div>)
 }

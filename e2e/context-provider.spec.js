@@ -5,8 +5,8 @@ import { join } from 'path'
 const root = process.cwd()
 
 test('test', async ({ page }) => {
-  await page.goto('http://localhost:5173/03-context-provider')
-  await expect(page).toHaveURL('http://localhost:5173/03-context-provider')
+  await page.goto('http://localhost:4173/03-context-provider')
+  await expect(page).toHaveURL('http://localhost:4173/03-context-provider')
 
   await page.locator('#previous-month').click()
   await page.locator('#previous-month').click()

@@ -5,12 +5,12 @@ import { join } from 'path'
 const root = process.cwd()
 
 test('test', async ({ page }) => {
-  // Go to http://localhost:5173/
-  await page.goto('http://localhost:5173/')
+  // Go to http://localhost:4173/
+  await page.goto('http://localhost:4173/')
 
   // Click text=05-mobx
   await page.locator('text=05-mobx').click()
-  await expect(page).toHaveURL('http://localhost:5173/05-mobx')
+  await expect(page).toHaveURL('http://localhost:4173/05-mobx')
 
   await page.locator('#previous-month').click()
   await page.locator('#previous-month').click()

@@ -2,15 +2,15 @@ import { writeFile } from 'fs/promises'
 import { test, expect } from '@playwright/test'
 import { join } from 'path'
 
-const root = process.cwd()
-
+const root = process.cwd(
+)
 test('test', async ({ page }) => {
-  // Go to http://localhost:5173/
-  await page.goto('http://localhost:5173/')
+  // Go to http://localhost:4173/
+  await page.goto('http://localhost:4173/')
 
   // Click text=01-hoisted-state-prop-drilling
   await page.locator('text=01-hoisted-state-prop-drilling').click()
-  await expect(page).toHaveURL('http://localhost:5173/01-hoisted-props')
+  await expect(page).toHaveURL('http://localhost:4173/01-hoisted-props')
 
   await page.locator('#previous-month').click()
   await page.locator('#previous-month').click()
@@ -33,7 +33,7 @@ test('test', async ({ page }) => {
     return new Promise((resolve) => {
       new PerformanceObserver((l) => {
         const entries = l.getEntries()
-        // the last entry is the largest contentful paint
+        // the last entry is the larges contentful paint
         const largestPaintEntry = entries.at(-1)
         resolve(largestPaintEntry.startTime)
       }).observe({

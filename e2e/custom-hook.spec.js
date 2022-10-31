@@ -5,12 +5,12 @@ import { join } from 'path'
 const root = process.cwd()
 
 test('test', async ({ page }) => {
-  // Go to http://localhost:5173/
-  await page.goto('http://localhost:5173/')
+  // Go to http://localhost:4173/
+  await page.goto('http://localhost:4173/')
 
   // Click text=01-custom-hook-state-prop-drilling
   await page.locator('text=02-custom-hook').click()
-  await expect(page).toHaveURL('http://localhost:5173/02-custom-hook')
+  await expect(page).toHaveURL('http://localhost:4173/02-custom-hook')
 
   await page.locator('#previous-month').click()
   await page.locator('#previous-month').click()
