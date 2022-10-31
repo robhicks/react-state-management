@@ -1,11 +1,12 @@
 import { writeFile } from 'fs/promises'
-import { test, expect } from '@playwright/test'
+import { chromium, test, expect } from '@playwright/test'
 import { join } from 'path'
 
 const root = process.cwd()
 
-test('test', async ({ page }) => {
-  // Go to http://localhost:5173/
+test('test', async () => {
+  const browser = await chromium.launch()
+  const page = await browser.newPage({ slowMod: 500 })
   await page.goto('http://localhost:5173/')
 
   // Click text=04-use-reducer

@@ -29,15 +29,15 @@ export default function Charts (props) {
     <div className="w-full px-8 py-4 h-full">
       <h1 className="prose prose-2xl mb-3">Charts</h1>
       <div className="h-[calc(100%-8rem)] overflow-y-auto">
+        <TotalBlockingTime />
+        <div className="mt-4 border border-gray-200"></div>
+        <Components />
         <DOMInteractive />
         <div className="mt-4 border border-gray-200"></div>
         <DOMComplete />
         <div className="mt-4 border border-gray-200"></div>
         <LargestContentfulPaint />
         <div className="mt-4 border border-gray-200"></div>
-        <TotalBlockingTime />
-        <div className="mt-4 border border-gray-200"></div>
-        <Components />
       </div>
     </div>
   )
