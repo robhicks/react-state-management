@@ -19,29 +19,34 @@ const Item = ({ item }) => {
   }, [budget.active, item.planned, item.actual])
 
   const changeName = (value) => {
-    const bud = copy(budget)
-    const { item: itm } = getItemData(bud, item.id)
-    itm.name = value
-    setBudget({ ...budget, ...bud })
+    setBudget((cur) => {
+      const bud = copy(cur)
+      const { item: itm } = getItemData(bud, item.id)
+      itm.name = value
+      return { ...cur, ...bud }
+    })
   }
 
   const changePlanned = (ev) => {
     const { value } = ev.target
     setPlanned(value)
-    const bud = copy(budget)
-    const { category, item: itm } = getItemData(bud, item.id)
-    itm.planned = +value
-    category.planned = category.items.reduce((p, c) => reducer(p, c, 'planned'))
-    category.remaining = category.planned - category.actual
-    setBudget({ ...budget, ...bud })
+    setBudget((cur) => {
+      const bud = copy(cur)
+      const { category, item: itm } = getItemData(bud, item.id)
+      itm.planned = +value
+      category.planned = category.items.reduce((p, c) => reducer(p, c, 'planned'))
+      return { ...cur, ...bud }
+    })
   }
 
   const addEmptyTx = () => {
-    const bud = copy(budget)
-    const { item: itm } = getItemData(bud, item.id)
-    const d = new Date()
-    itm.transactions.push({ amount: 0, date: d.toISOString().substring(0, 10), id: uuid() })
-    setBudget({ ...budget, ...bud })
+    setBudget((cur) => {
+      const bud = copy(cur)
+      const { item: itm } = getItemData(bud, item.id)
+      const d = new Date()
+      itm.transactions.push({ amount: 0, date: d.toISOString().substring(0, 10), id: uuid() })
+      return { ...cur, ...bud }
+    })
   }
 
   return (

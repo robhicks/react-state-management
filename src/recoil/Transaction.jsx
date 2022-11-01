@@ -21,39 +21,39 @@ const Transaction = ({ transaction }) => {
   }, [])
 
   const delTx = () => {
-    const bud = copy(budget)
-    const { category, item } = getTransactionData(bud, transaction.id)
-    item.transactions = item.transactions.filter((t) => t.id !== transaction.id)
-    item.actual = item.transactions.reduce((p, c) => reducer(p, c, 'amount'), 0)
-    item.remaining = item.planned - item.actual
-    category.actual = category.items.reduce((p, c) => reducer(p, c, 'actual'), 0)
-    category.remaining = category.planned - category.actual
-    setBudget({ ...budget, ...bud })
+    setBudget((cur) => {
+      const bud = copy(cur)
+      const { item } = getTransactionData(bud, transaction.id)
+      item.transactions = item.transactions.filter((t) => t.id !== transaction.id)
+      return { ...cur, ...bud }
+    })
   }
 
   const dateChangeHandler = (ev) => {
-    const bud = copy(budget)
-    const { transaction: tx } = getTransactionData(bud, transaction.id)
-    tx.date = ev.target.value
-    setBudget({ ...budget, ...bud })
+    setBudget((cur) => {
+      const bud = copy(cur)
+      const { transaction: tx } = getTransactionData(bud, transaction.id)
+      tx.date = ev.target.value
+      return { ...cur, ...bud }
+    })
   }
 
   const sourceChangeHandler = (ev) => {
-    const bud = copy(budget)
-    const { transaction: tx } = getTransactionData(bud, transaction.id)
-    tx.source = ev.target.value
-    setBudget({ ...budget, ...bud })
+    setBudget((cur) => {
+      const bud = copy(cur)
+      const { transaction: tx } = getTransactionData(bud, transaction.id)
+      tx.source = ev.target.value
+      return { ...cur, ...bud }
+    })
   }
 
   const amountChangeHandler = (ev) => {
-    const bud = copy(budget)
-    const { category, item, transaction: tx } = getTransactionData(bud, transaction.id)
-    tx.amount = +ev.target.value
-    item.actual = item.transactions.reduce((p, c) => reducer(p, c, 'amount'), 0)
-    item.remaining = item.planned - item.actual
-    category.actual = category.items.reduce((p, c) => reducer(p, c, 'actual'), 0)
-    category.remaining = category.planned - category.actual
-    setBudget({ ...budget, ...bud })
+    setBudget((cur) => {
+      const bud = copy(cur)
+      const { transaction: tx } = getTransactionData(bud, transaction.id)
+      tx.amount = +ev.target.value
+      return { ...cur, ...bud }
+    })
   }
 
   return (

@@ -16,12 +16,14 @@ export default function MonthlyBudgets ({ budget, setBudget }) {
   }, [budget.currentDate, budget.monthlyBudgets])
 
   const createMonthlyBudget = () => {
-    const bud = copy(budget)
-    const month = budget.currentDate.getMonth()
-    const year = budget.currentDate.getFullYear()
-    const mb = genMonthlyBudget(month, year)
-    bud.monthlyBudgets.push(mb)
-    setBudget(bud)
+    setBudget((cur) => {
+      const bud = copy(cur)
+      const month = cur.currentDate.getMonth()
+      const year = cur.currentDate.getFullYear()
+      const mb = genMonthlyBudget(month, year)
+      bud.monthlyBudgets.push(mb)
+      return { ...cur, ...bud }
+    })
   }
 
   if (monthlyBudget) {

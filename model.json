@@ -1,7 +1,8 @@
 {
   "active": "string",
-  "name": "string",
+  "currentDate": "Date",
   "id": "string",
+  "name": "string",
   "monthlyBudgets": [
     {
       "id": "string",
@@ -13,7 +14,6 @@
           {
             "id": "string",
             "name": "string",
-            "fund": "boolean",
             "items": [
               {
                 "id": "string",
@@ -24,8 +24,7 @@
                     "id": "string",
                     "amount": "number",
                     "source": "string",
-                    "date": "date string",
-                    "note": "string"
+                    "date": "date string"
                   }
                 ]
               }

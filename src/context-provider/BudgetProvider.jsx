@@ -11,15 +11,17 @@ export const BudgetProvider = ({ children }) => {
   const [budget, setBudget] = useState({ ...model, currentDate: new Date() })
 
   useEffect(() => {
-    const d = budget?.currentDate ? new Date(budget.currentDate) : new Date()
-    const month = d.getMonth()
-    const year = d.getFullYear()
-    const currentBudget = budget.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
-    setBudget({ ...budget, currentBudget })
+    setBudget((cur) => {
+      const d = cur?.currentDate ? new Date(cur.currentDate) : new Date()
+      const month = d.getMonth()
+      const year = d.getFullYear()
+      const currentBudget = cur.monthlyBudgets.find((mb) => mb.month === month && mb.year === year)
+      return { ...budget, currentBudget }
+    })
   }, [budget.currentDate, budget.monthlyBudgets])
 
   const addMonthlyBudget = (bud) => {
-    setBudget({ ...budget, ...bud })
+    setBudget((cur) => ({ ...cur, ...bud }))
   }
 
   const addEmptyTransaction = (itemId) => {
@@ -28,7 +30,7 @@ export const BudgetProvider = ({ children }) => {
       const { item } = getItemData(bud, itemId)
       const d = new Date()
       item.transactions.push({ amount: 0, date: d.toISOString().substring(0, 10), id: uuid() })
-      return bud
+      return { ...cur, ...bud }
     })
   }
 

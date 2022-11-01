@@ -34,10 +34,12 @@ const Category = ({ category }) => {
   }, [budget.active, actual, planned, remaining])
 
   const updateName = (val) => {
-    const bud = copy(budget)
-    const { category: cat } = getCategoryData(bud, category.id)
-    cat.name = val
-    setBudget({ ...budget, ...bud })
+    setBudget((cur) => {
+      const bud = copy(cur)
+      const { category: cat } = getCategoryData(bud, category.id)
+      cat.name = val
+      return { ...cur, ...bud }
+    })
   }
 
   return (

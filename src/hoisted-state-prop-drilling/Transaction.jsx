@@ -18,29 +18,37 @@ export default function Transaction ({ budget, setBudget, transaction }) {
   }, [])
 
   const delTx = () => {
-    const bud = copy(budget)
-    const { item } = getTransactionData(bud, transaction.id)
-    item.transactions = item.transactions.filter((t) => t.id !== transaction.id)
-    setBudget({ ...budget, ...bud })
+    setBudget((cur) => {
+      const bud = copy(cur)
+      const { item } = getTransactionData(bud, transaction.id)
+      item.transactions = item.transactions.filter((t) => t.id !== transaction.id)
+      return { ...budget, ...bud }
+    })
   }
 
   const dateChangeHandler = (ev) => {
-    const bud = copy(budget)
-    const { transaction: tx } = getTransactionData(bud, transaction.id)
-    tx.date = ev.target.value
-    setBudget({ ...budget, ...bud })
+    setBudget((cur) => {
+      const bud = copy(cur)
+      const { transaction: tx } = getTransactionData(bud, transaction.id)
+      tx.date = ev.target.value
+      return { ...cur, ...bud }
+    })
   }
   const sourceChangeHandler = (ev) => {
-    const bud = copy(budget)
-    const { transaction: tx } = getTransactionData(bud, transaction.id)
-    tx.source = ev.target.value
-    setBudget({ ...budget, ...bud })
+    setBudget((cur) => {
+      const bud = copy(cur)
+      const { transaction: tx } = getTransactionData(bud, transaction.id)
+      tx.source = ev.target.value
+      return { ...cur, ...bud }
+    })
   }
   const amountChangeHandler = (ev) => {
-    const bud = copy(budget)
-    const { transaction: tx } = getTransactionData(bud, transaction.id)
-    tx.amount = +ev.target.value
-    setBudget((cur) => ({ ...cur, ...bud }))
+    setBudget((cur) => {
+      const bud = copy(cur)
+      const { transaction: tx } = getTransactionData(bud, transaction.id)
+      tx.amount = +ev.target.value
+      return { ...cur, ...bud }
+    })
   }
 
   // console.log('transaction', transaction)
